@@ -1,6 +1,8 @@
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils.six import python_2_unicode_compatible
 
 
 class Category(models.Model):
@@ -59,3 +61,11 @@ class Post(models.Model):
     # 这里我们通过 ForeignKey 把文章和 User 关联了起来。
     # 因为我们规定一篇文章只能有一个作者，而一个作者可能会写多篇文章，因此这是一对多的关联关系，和 Category 类似。
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+    # 自定义 get_absolute_url 方法
+    # 记得从 django.urls 中导入 reverse 函数
+    def get_absolute_url(self):
+        return reverse('blog:detail', kwargs={'pk': self.pk})
