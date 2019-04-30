@@ -1,0 +1,3048 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="blog-content-box">
+	<div class="article-header-box">
+		<div class="article-header">
+			<div class="article-title-box">
+				<span class="article-type type-1 float-left">原</span>				<h1 class="title-article">Android开发：原生+H5之：Android webview配置</h1>
+			</div>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+																									<span class="time">2018年04月12日 15:05:26</span>
+					<a class="follow-nickName" href="https://me.csdn.net/To_be_Designer" target="_blank">小_爽</a>
+						<span class="read-count">阅读数：644</span>
+
+																															</div>
+				<div class="operating">
+									</div>
+			</div>
+		</div>
+	</div>
+	<article class="baidu_pl">
+		<div id="article_content" class="article_content clearfix csdn-tracking-statistics" data-pid="blog"  data-mod=popu_307  data-dsm = "post" >
+								<div class="article-copyright">
+                  					<svg class="icon" title="CSDN认证原创" aria-hidden="true" style="width:53px; height: 18px; vertical-align: -4px;">
+							<use xlink:href="#CSDN_Cert"></use>
+					</svg>
+
+					版权声明：本文为博主原创文章，欢迎转载，转载请在文章显眼处说明文章出处并给出连接。					https://blog.csdn.net/To_be_Designer/article/details/79914043				</div>
+								<link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/ck_htmledit_views-f57960eb32.css" />
+        <a href='https://edu.csdn.net/topic/ai30?utm_source=bw_bt'><img src='https://img-bss.csdn.net/1556441625518.jpg' /></a>								            <div id="content_views" class="markdown_views prism-atom-one-dark">
+							<!-- flowchart 箭头图标 勿删 -->
+							<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg>
+							<p>　　在上一篇文章<a href="https://blog.csdn.net/To_be_Designer/article/details/79891496" rel="nofollow">Android 原生开发、H5、React-Native开发特点</a>，我们可以了解到三种Android开发方式的区别和优缺点。<strong>[Android开发：原生+H5]</strong>系列的文章，将主要讲解Android原生+H5开发相关，这一节主要是Android原生+H5开发时要使用WebView，要使WebView正确的显示加载H5页面和功能需要做相关的配置。</p>
+
+
+
+<h2 id="androidmanifest权限添加">AndroidManifest权限添加</h2>
+
+<p>　　 <br>
+　　请一定、务必在AndroidManifest中添加如下权限，否则是无法正常打开显示H5页面的。 <br>
+　　这个一定要单独拿出来强调一下，以防你其他代码啊，配置啊什么的都写好了，但就是不显示，然后你就各种找问题，发愁，恼怒，耽误时间。因为楼主就曾经犯过这样的错误，真的被自己粗心蠢哭，哭哭哭……</p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs ">&lt;uses-permission android:name=<span class="hljs-string">"android.permission.INTERNET"</span>/&gt;</code></pre>
+
+
+
+<h2 id="webview使用步骤">WebView使用步骤</h2>
+
+<p><strong>1. 添加AndroidManifest权限。</strong></p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs ">&lt;uses-permission android:name=<span class="hljs-string">"android.permission.INTERNET"</span>/&gt;</code></pre>
+
+<p><strong>2. 布局文件</strong></p>
+
+
+
+<pre class="prettyprint"><code class=" hljs xml"><span class="hljs-pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">LinearLayout</span> <span class="hljs-attribute">xmlns:android</span>=<span class="hljs-value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="hljs-attribute">xmlns:app</span>=<span class="hljs-value">"http://schemas.android.com/apk/res-auto"</span>
+    <span class="hljs-attribute">xmlns:tools</span>=<span class="hljs-value">"http://schemas.android.com/tools"</span>
+    <span class="hljs-attribute">android:layout_width</span>=<span class="hljs-value">"match_parent"</span>
+    <span class="hljs-attribute">android:layout_height</span>=<span class="hljs-value">"match_parent"</span>
+    <span class="hljs-attribute">android:orientation</span>=<span class="hljs-value">"vertical"</span>
+    <span class="hljs-attribute">tools:context</span>=<span class="hljs-value">"com.app.www.webapp.SecondActivity"</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-title">WebView
+</span>        <span class="hljs-attribute">android:id</span>=<span class="hljs-value">"@+id/webView"</span>
+        <span class="hljs-attribute">android:layout_width</span>=<span class="hljs-value">"match_parent"</span>
+        <span class="hljs-attribute">android:layout_height</span>=<span class="hljs-value">"match_parent"</span> /&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-title">LinearLayout</span>&gt;</span></code></pre>
+
+<p><strong>3. 获取WebView对象</strong></p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs ">   webView = <span class="hljs-keyword">this</span>.findViewById(R.id.webView);</code></pre>
+
+<p><strong>4. WebSettings配置WebView。</strong>下面有具体的配置说明。 <br>
+<strong>5. 设置加载地址。</strong></p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs ">   <span class="hljs-keyword">this</span>.webView.loadUrl(url);</code></pre>
+
+<p>　　到这一步为止，WebView就可以正常的显示了，如果我们想要对WebView做进一步的监听处理，就需要下面的设置。 <br>
+　　 <br>
+<strong>6. 设置WebViewClient。</strong> WebViewClient主要是监听WebView加载进程，平常我们对webview加载的处理，例如加一些进度条、跳转设置之类的都是通过WebViewClient类完成。在下面我们会讲到。 <br>
+<strong>7. 设置WebChromeClient。</strong> 有时候我们不想原生去调用手机的拍照和相册，如果我们想要用H5去掉用的话，我们需要去重新WebChromeClient类，并进行设置，这样H5才能成功的调用拍照和相册。下面会细讲。</p>
+
+
+
+<h2 id="websettings类配置">WebSettings类配置</h2>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs ">        <span class="hljs-javadoc">/**支持Js**/</span>
+        setting.setJavaScriptEnabled(<span class="hljs-keyword">true</span>);
+
+        <span class="hljs-javadoc">/**设置自适应屏幕，两者合用**/</span>
+        <span class="hljs-comment">//将图片调整到适合webview的大小</span>
+        setting.setUseWideViewPort(<span class="hljs-keyword">true</span>);
+        <span class="hljs-comment">// 缩放至屏幕的大小</span>
+        setting.setLoadWithOverviewMode(<span class="hljs-keyword">true</span>);
+
+        <span class="hljs-javadoc">/**缩放操作**/</span>
+        <span class="hljs-comment">// 是否支持画面缩放，默认不支持</span>
+        setting.setBuiltInZoomControls(<span class="hljs-keyword">true</span>);
+        setting.setSupportZoom(<span class="hljs-keyword">true</span>);
+        <span class="hljs-comment">// 是否显示缩放图标，默认显示</span>
+        setting.setDisplayZoomControls(<span class="hljs-keyword">false</span>);
+        <span class="hljs-comment">// 设置网页内容自适应屏幕大小</span>
+        setting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
+        <span class="hljs-javadoc">/**设置允许JS弹窗**/</span>
+        setting.setJavaScriptCanOpenWindowsAutomatically(<span class="hljs-keyword">true</span>);
+        setting.setDomStorageEnabled(<span class="hljs-keyword">true</span>);
+
+        <span class="hljs-javadoc">/**关闭webview中缓存**/</span>
+        setting.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        <span class="hljs-javadoc">/**设置可以访问文件 **/</span>
+        setting.setAllowFileAccess(<span class="hljs-keyword">true</span>);
+        setting.setAllowFileAccessFromFileURLs(<span class="hljs-keyword">true</span>);
+        setting.setAllowUniversalAccessFromFileURLs(<span class="hljs-keyword">true</span>);</code></pre>
+
+
+
+<h2 id="webviewclient类">WebViewClient类</h2>
+
+<p>　　如果不进行设置WebViewClient的话，我们的WebView通常会跳转到手机自带的浏览器去进行显示，但是我们想要的是在app内显示，所以我们需要对WebViewClient进行设置。对这个类的使用我们之前在<a href="https://blog.csdn.net/to_be_designer/article/details/48397789" rel="nofollow"> Android 网络连接——WebView</a>这篇文章中也讲过，这里我就只复制一下。</p>
+
+
+
+<h3 id="webview加载失败设置">WebView加载失败设置</h3>
+
+<p>　　我们在使用浏览器时，我们经常会看到，如果页面加载失败会出现一个提示的页面。我们自己的浏览器当然也少不了这个功能。设置加载页面失败调用WebView的setWebViewClient()方法，传入匿名WebViewClient对象，重写onReceivedError()方法，在该方法内进行处理。</p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs ">webView.setWebViewClient(<span class="hljs-keyword">new</span> WebViewClient() {
+    <span class="hljs-comment">/*
+    网络连接错误时调用
+    */</span>
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onReceivedError</span>(WebView view, <span class="hljs-keyword">int</span> errorCode, String description, String failingUrl){
+        <span class="hljs-keyword">super</span>.onReceivedError(view, errorCode, description, failingUrl);
+    }
+});</code></pre>
+
+
+
+<h3 id="webview网页加载进度条显示">WebView网页加载进度条显示</h3>
+
+<pre class="prettyprint"><code class="language-java hljs ">        webView.setWebChromeClient(<span class="hljs-keyword">new</span> WebChromeClient() {
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onProgressChanged</span>(WebView view, <span class="hljs-keyword">int</span> newProgress) {
+                <span class="hljs-keyword">super</span>.onProgressChanged(view, newProgress);
+                progressBar.setProgress(newProgress);<span class="hljs-comment">//网络加载时设置进度条进度</span>
+            }
+        });
+        webView.setWebViewClient(<span class="hljs-keyword">new</span> WebViewClient() {
+            <span class="hljs-comment">/*
+            网络开始加载时调用
+            */</span>
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPageStarted</span>(WebView view, String url, Bitmap favicon) {
+                <span class="hljs-keyword">super</span>.onPageStarted(view, url, favicon);
+                progressBar.setVisibility(View.VISIBLE);<span class="hljs-comment">//设置显示进度条</span>
+            }
+
+            <span class="hljs-comment">/*
+            网络加载结束时调用
+            */</span>
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPageFinished</span>(WebView view, String url) {
+                <span class="hljs-keyword">super</span>.onPageFinished(view, url);
+                progressBar.setVisibility(View.GONE);<span class="hljs-comment">//设置去除进度条</span>
+            }
+        });</code></pre>
+
+
+
+<h2 id="webchromeclient类">WebChromeClient类</h2>
+
+<p>　　H5想要调用我们手机的相册和拍照，直接调用是不行的，我们必须在WebView设置中进行设置。重写WebChromeClient类。</p>
+
+
+
+<pre class="prettyprint"><code class="language-java hljs ">
+<span class="hljs-keyword">import</span> android.annotation.SuppressLint;
+<span class="hljs-keyword">import</span> android.annotation.TargetApi;
+<span class="hljs-keyword">import</span> android.app.Activity;
+<span class="hljs-keyword">import</span> android.content.ClipData;
+<span class="hljs-keyword">import</span> android.content.ComponentName;
+<span class="hljs-keyword">import</span> android.content.ContentUris;
+<span class="hljs-keyword">import</span> android.content.Context;
+<span class="hljs-keyword">import</span> android.content.Intent;
+<span class="hljs-keyword">import</span> android.content.pm.PackageManager;
+<span class="hljs-keyword">import</span> android.content.pm.ResolveInfo;
+<span class="hljs-keyword">import</span> android.database.Cursor;
+<span class="hljs-keyword">import</span> android.graphics.Bitmap;
+<span class="hljs-keyword">import</span> android.net.Uri;
+<span class="hljs-keyword">import</span> android.os.Build;
+<span class="hljs-keyword">import</span> android.os.Environment;
+<span class="hljs-keyword">import</span> android.os.Parcelable;
+<span class="hljs-keyword">import</span> android.provider.DocumentsContract;
+<span class="hljs-keyword">import</span> android.provider.MediaStore;
+<span class="hljs-keyword">import</span> android.support.v7.app.AppCompatActivity;
+<span class="hljs-keyword">import</span> android.os.Bundle;
+<span class="hljs-keyword">import</span> android.view.KeyEvent;
+<span class="hljs-keyword">import</span> android.webkit.ValueCallback;
+<span class="hljs-keyword">import</span> android.webkit.WebChromeClient;
+<span class="hljs-keyword">import</span> android.webkit.WebSettings;
+<span class="hljs-keyword">import</span> android.webkit.WebView;
+<span class="hljs-keyword">import</span> android.webkit.WebViewClient;
+<span class="hljs-keyword">import</span> android.widget.Toast;
+
+<span class="hljs-keyword">import</span> java.io.File;
+<span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">import</span> java.util.List;
+
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> android.view.KeyEvent.KEYCODE_BACK;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SecondActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Activity</span> {</span>
+    <span class="hljs-keyword">private</span> WebView webView;
+    <span class="hljs-keyword">private</span> Intent intent;
+    <span class="hljs-keyword">private</span> String url;
+    <span class="hljs-javadoc">/**
+     * 表单的数据信息
+     */</span>
+    <span class="hljs-keyword">private</span> ValueCallback&lt;Uri&gt; mUploadMessage;
+    <span class="hljs-keyword">private</span> ValueCallback&lt;Uri[]&gt; mUploadCallbackAboveL;
+    <span class="hljs-javadoc">/**
+     * 表单的结果回调&lt;/span&gt;
+     */</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> FILECHOOSER_RESULTCODE = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">private</span> Uri imageUri;
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span>(Bundle savedInstanceState) {
+        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        intent = getIntent();
+        url = intent.getStringExtra(<span class="hljs-string">"url"</span>);
+        Toast.makeText(<span class="hljs-keyword">this</span>, url, Toast.LENGTH_SHORT).show();
+        webView = <span class="hljs-keyword">this</span>.findViewById(R.id.webView);
+
+        initWebView();
+<span class="hljs-comment">//        this.webView.loadUrl("http://192.168.1.105:8099/photo");</span>
+        webView.loadUrl(url);
+
+        webView.setWebViewClient(<span class="hljs-keyword">new</span> WebViewClient() {
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">shouldOverrideUrlLoading</span>(WebView view, String url) {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.shouldOverrideUrlLoading(view, url);
+            }
+
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPageStarted</span>(WebView view, String url, Bitmap favicon) {
+                <span class="hljs-keyword">super</span>.onPageStarted(view, url, favicon);
+            }
+
+            <span class="hljs-annotation">@Override</span>
+            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPageFinished</span>(WebView view, String url) {
+                <span class="hljs-keyword">super</span>.onPageFinished(view, url);
+            }
+        });
+        webView.setWebChromeClient(<span class="hljs-keyword">new</span> OpenFileChromeClient());
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OpenFileChromeClient</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WebChromeClient</span> {</span>
+
+        <span class="hljs-annotation">@Override</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">onShowFileChooser</span>(WebView webView,
+                                         ValueCallback&lt;Uri[]&gt; filePathCallback,
+                                         FileChooserParams fileChooserParams) {
+            mUploadCallbackAboveL = filePathCallback;
+            take();
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;
+        }
+
+        <span class="hljs-javadoc">/**
+         * Android &lt; 3.0 调用这个方法
+         *
+         *<span class="hljs-javadoctag"> @param</span> uploadMsg
+         */</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">openFileChooser</span>(ValueCallback&lt;Uri&gt; uploadMsg) {
+            mUploadMessage = uploadMsg;
+            take();
+        }
+
+        <span class="hljs-javadoc">/**
+         * Android &lt; 3.0 调用这个方法
+         *
+         *<span class="hljs-javadoctag"> @param</span> uploadMsg
+         *<span class="hljs-javadoctag"> @param</span> acceptType
+         */</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">openFileChooser</span>(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType) {
+            mUploadMessage = uploadMsg;
+            take();
+        }
+
+        <span class="hljs-javadoc">/**
+         * Android &gt; 4.1.1 调用这个方法
+         *
+         *<span class="hljs-javadoctag"> @param</span> uploadMsg
+         *<span class="hljs-javadoctag"> @param</span> acceptType
+         *<span class="hljs-javadoctag"> @param</span> capture
+         */</span>
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">openFileChooser</span>(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType, String capture) {
+            mUploadMessage = uploadMsg;
+            take();
+        }
+    }
+
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initWebView</span>() {
+        WebSettings setting = webView.getSettings();
+        <span class="hljs-javadoc">/**支持Js**/</span>
+        setting.setJavaScriptEnabled(<span class="hljs-keyword">true</span>);
+
+        <span class="hljs-javadoc">/**设置自适应屏幕，两者合用**/</span>
+        <span class="hljs-comment">//将图片调整到适合webview的大小</span>
+        setting.setUseWideViewPort(<span class="hljs-keyword">true</span>);
+        <span class="hljs-comment">// 缩放至屏幕的大小</span>
+        setting.setLoadWithOverviewMode(<span class="hljs-keyword">true</span>);
+
+        <span class="hljs-javadoc">/**缩放操作**/</span>
+        <span class="hljs-comment">// 是否支持画面缩放，默认不支持</span>
+        setting.setBuiltInZoomControls(<span class="hljs-keyword">true</span>);
+        setting.setSupportZoom(<span class="hljs-keyword">true</span>);
+        <span class="hljs-comment">// 是否显示缩放图标，默认显示</span>
+        setting.setDisplayZoomControls(<span class="hljs-keyword">false</span>);
+        <span class="hljs-comment">// 设置网页内容自适应屏幕大小</span>
+        setting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
+        <span class="hljs-javadoc">/**设置允许JS弹窗**/</span>
+        setting.setJavaScriptCanOpenWindowsAutomatically(<span class="hljs-keyword">true</span>);
+        setting.setDomStorageEnabled(<span class="hljs-keyword">true</span>);
+
+
+        <span class="hljs-javadoc">/**关闭webview中缓存**/</span>
+        setting.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        <span class="hljs-javadoc">/**设置可以访问文件 **/</span>
+        setting.setAllowFileAccess(<span class="hljs-keyword">true</span>);
+        setting.setAllowFileAccessFromFileURLs(<span class="hljs-keyword">true</span>);
+        setting.setAllowUniversalAccessFromFileURLs(<span class="hljs-keyword">true</span>);
+
+    }
+
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onActivityResult</span>(<span class="hljs-keyword">int</span> requestCode, <span class="hljs-keyword">int</span> resultCode, Intent data) {
+        <span class="hljs-keyword">super</span>.onActivityResult(requestCode, resultCode, data);
+        <span class="hljs-keyword">if</span> (requestCode == FILECHOOSER_RESULTCODE) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">null</span> == mUploadMessage &amp;&amp; <span class="hljs-keyword">null</span> == mUploadCallbackAboveL) <span class="hljs-keyword">return</span>;
+            Uri result = data == <span class="hljs-keyword">null</span> || resultCode != RESULT_OK ? <span class="hljs-keyword">null</span> : data.getData();
+            <span class="hljs-keyword">if</span> (mUploadCallbackAboveL != <span class="hljs-keyword">null</span>) {
+                onActivityResultAboveL(requestCode, resultCode, data);
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (mUploadMessage != <span class="hljs-keyword">null</span>) {
+
+                <span class="hljs-keyword">if</span> (result != <span class="hljs-keyword">null</span>) {
+                    String path = getPath(getApplicationContext(),
+                            result);
+                    Uri uri = Uri.fromFile(<span class="hljs-keyword">new</span> File(path));
+                    mUploadMessage
+                            .onReceiveValue(uri);
+                } <span class="hljs-keyword">else</span> {
+                    mUploadMessage.onReceiveValue(imageUri);
+                }
+                mUploadMessage = <span class="hljs-keyword">null</span>;
+
+
+            }
+        }
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">onKeyDown</span>(<span class="hljs-keyword">int</span> keyCode, KeyEvent event) {
+        <span class="hljs-keyword">if</span> ((keyCode == KEYCODE_BACK) &amp;&amp; webView.canGoBack()) {
+            webView.goBack();
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.onKeyDown(keyCode, event);
+    }
+
+    <span class="hljs-annotation">@SuppressWarnings</span>(<span class="hljs-string">"null"</span>)
+    <span class="hljs-annotation">@TargetApi</span>(Build.VERSION_CODES.BASE)
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onActivityResultAboveL</span>(<span class="hljs-keyword">int</span> requestCode, <span class="hljs-keyword">int</span> resultCode, Intent data) {
+        <span class="hljs-keyword">if</span> (requestCode != FILECHOOSER_RESULTCODE
+                || mUploadCallbackAboveL == <span class="hljs-keyword">null</span>) {
+            <span class="hljs-keyword">return</span>;
+        }
+
+        Uri[] results = <span class="hljs-keyword">null</span>;
+
+        <span class="hljs-keyword">if</span> (resultCode == Activity.RESULT_OK) {
+
+            <span class="hljs-keyword">if</span> (data == <span class="hljs-keyword">null</span>) {
+
+                results = <span class="hljs-keyword">new</span> Uri[]{imageUri};
+            } <span class="hljs-keyword">else</span> {
+                String dataString = data.getDataString();
+                ClipData clipData = data.getClipData();
+
+                <span class="hljs-keyword">if</span> (clipData != <span class="hljs-keyword">null</span>) {
+                    results = <span class="hljs-keyword">new</span> Uri[clipData.getItemCount()];
+                    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; clipData.getItemCount(); i++) {
+                        ClipData.Item item = clipData.getItemAt(i);
+                        results[i] = item.getUri();
+                    }
+                }
+
+                <span class="hljs-keyword">if</span> (dataString != <span class="hljs-keyword">null</span>)
+                    results = <span class="hljs-keyword">new</span> Uri[]{Uri.parse(dataString)};
+            }
+        }
+        <span class="hljs-keyword">if</span> (results != <span class="hljs-keyword">null</span>) {
+            mUploadCallbackAboveL.onReceiveValue(results);
+            mUploadCallbackAboveL = <span class="hljs-keyword">null</span>;
+        } <span class="hljs-keyword">else</span> {
+            results = <span class="hljs-keyword">new</span> Uri[]{imageUri};
+            mUploadCallbackAboveL.onReceiveValue(results);
+            mUploadCallbackAboveL = <span class="hljs-keyword">null</span>;
+        }
+
+        <span class="hljs-keyword">return</span>;
+    }
+
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">take</span>() {
+        File imageStorageDir = <span class="hljs-keyword">new</span> File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), <span class="hljs-string">"MyApp"</span>);
+        <span class="hljs-comment">// Create the storage directory if it does not exist</span>
+        <span class="hljs-keyword">if</span> (!imageStorageDir.exists()) {
+            imageStorageDir.mkdirs();
+        }
+        File file = <span class="hljs-keyword">new</span> File(imageStorageDir + File.separator + <span class="hljs-string">"IMG_"</span> + String.valueOf(System.currentTimeMillis()) + <span class="hljs-string">".jpg"</span>);
+        imageUri = Uri.fromFile(file);
+
+        <span class="hljs-keyword">final</span> List&lt;Intent&gt; cameraIntents = <span class="hljs-keyword">new</span> ArrayList&lt;Intent&gt;();
+        <span class="hljs-keyword">final</span> Intent captureIntent = <span class="hljs-keyword">new</span> Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        <span class="hljs-keyword">final</span> PackageManager packageManager = getPackageManager();
+        <span class="hljs-keyword">final</span> List&lt;ResolveInfo&gt; listCam = packageManager.queryIntentActivities(captureIntent, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">for</span> (ResolveInfo res : listCam) {
+            <span class="hljs-keyword">final</span> String packageName = res.activityInfo.packageName;
+            <span class="hljs-keyword">final</span> Intent i = <span class="hljs-keyword">new</span> Intent(captureIntent);
+            i.setComponent(<span class="hljs-keyword">new</span> ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            i.setPackage(packageName);
+            i.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            cameraIntents.add(i);
+
+        }
+        Intent i = <span class="hljs-keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(<span class="hljs-string">"image/*"</span>);
+        Intent chooserIntent = Intent.createChooser(i, <span class="hljs-string">"Image Chooser"</span>);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(<span class="hljs-keyword">new</span> Parcelable[]{}));
+        SecondActivity.<span class="hljs-keyword">this</span>.startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
+    }
+
+    <span class="hljs-annotation">@SuppressLint</span>(<span class="hljs-string">"NewApi"</span>)
+    <span class="hljs-annotation">@TargetApi</span>(Build.VERSION_CODES.KITKAT)
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getPath</span>(<span class="hljs-keyword">final</span> Context context, <span class="hljs-keyword">final</span> Uri uri) {
+        <span class="hljs-keyword">final</span> <span class="hljs-keyword">boolean</span> isKitKat = Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT;
+
+        <span class="hljs-comment">// DocumentProvider</span>
+        <span class="hljs-keyword">if</span> (isKitKat &amp;&amp; DocumentsContract.isDocumentUri(context, uri)) {
+            <span class="hljs-comment">// ExternalStorageProvider</span>
+            <span class="hljs-keyword">if</span> (isExternalStorageDocument(uri)) {
+                <span class="hljs-keyword">final</span> String docId = DocumentsContract.getDocumentId(uri);
+                <span class="hljs-keyword">final</span> String[] split = docId.split(<span class="hljs-string">":"</span>);
+                <span class="hljs-keyword">final</span> String type = split[<span class="hljs-number">0</span>];
+
+                <span class="hljs-keyword">if</span> (<span class="hljs-string">"primary"</span>.equalsIgnoreCase(type)) {
+                    <span class="hljs-keyword">return</span> Environment.getExternalStorageDirectory() + <span class="hljs-string">"/"</span> + split[<span class="hljs-number">1</span>];
+                }
+
+                <span class="hljs-comment">// TODO handle non-primary volumes</span>
+            }
+            <span class="hljs-comment">// DownloadsProvider</span>
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isDownloadsDocument(uri)) {
+
+                <span class="hljs-keyword">final</span> String id = DocumentsContract.getDocumentId(uri);
+                <span class="hljs-keyword">final</span> Uri contentUri = ContentUris.withAppendedId(Uri.parse(<span class="hljs-string">"content://downloads/public_downloads"</span>), Long.valueOf(id));
+
+                <span class="hljs-keyword">return</span> getDataColumn(context, contentUri, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>);
+            }
+            <span class="hljs-comment">// MediaProvider</span>
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isMediaDocument(uri)) {
+                <span class="hljs-keyword">final</span> String docId = DocumentsContract.getDocumentId(uri);
+                <span class="hljs-keyword">final</span> String[] split = docId.split(<span class="hljs-string">":"</span>);
+                <span class="hljs-keyword">final</span> String type = split[<span class="hljs-number">0</span>];
+
+                Uri contentUri = <span class="hljs-keyword">null</span>;
+                <span class="hljs-keyword">if</span> (<span class="hljs-string">"image"</span>.equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">"video"</span>.equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">"audio"</span>.equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                <span class="hljs-keyword">final</span> String selection = <span class="hljs-string">"_id=?"</span>;
+                <span class="hljs-keyword">final</span> String[] selectionArgs = <span class="hljs-keyword">new</span> String[]{split[<span class="hljs-number">1</span>]};
+
+                <span class="hljs-keyword">return</span> getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        <span class="hljs-comment">// MediaStore (and general)</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">"content"</span>.equalsIgnoreCase(uri.getScheme())) {
+            <span class="hljs-keyword">return</span> getDataColumn(context, uri, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>);
+        }
+        <span class="hljs-comment">// File</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">"file"</span>.equalsIgnoreCase(uri.getScheme())) {
+            <span class="hljs-keyword">return</span> uri.getPath();
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+    }
+
+
+    <span class="hljs-javadoc">/**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     *<span class="hljs-javadoctag"> @param</span> context       The context.
+     *<span class="hljs-javadoctag"> @param</span> uri           The Uri to query.
+     *<span class="hljs-javadoctag"> @param</span> selection     (Optional) Filter used in the query.
+     *<span class="hljs-javadoctag"> @param</span> selectionArgs (Optional) Selection arguments used in the query.
+     *<span class="hljs-javadoctag"> @return</span> The value of the _data column, which is typically a file path.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getDataColumn</span>(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">final</span> String column = <span class="hljs-string">"_data"</span>;
+        <span class="hljs-keyword">final</span> String[] projection = {column};
+
+        <span class="hljs-keyword">try</span> {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, <span class="hljs-keyword">null</span>);
+            <span class="hljs-keyword">if</span> (cursor != <span class="hljs-keyword">null</span> &amp;&amp; cursor.moveToFirst()) {
+                <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> column_index = cursor.getColumnIndexOrThrow(column);
+                <span class="hljs-keyword">return</span> cursor.getString(column_index);
+            }
+        } <span class="hljs-keyword">finally</span> {
+            <span class="hljs-keyword">if</span> (cursor != <span class="hljs-keyword">null</span>) cursor.close();
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+    }
+
+
+    <span class="hljs-javadoc">/**
+     *<span class="hljs-javadoctag"> @param</span> uri The Uri to check.
+     *<span class="hljs-javadoctag"> @return</span> Whether the Uri authority is ExternalStorageProvider.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isExternalStorageDocument</span>(Uri uri) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"com.android.externalstorage.documents"</span>.equals(uri.getAuthority());
+    }
+
+
+    <span class="hljs-javadoc">/**
+     *<span class="hljs-javadoctag"> @param</span> uri The Uri to check.
+     *<span class="hljs-javadoctag"> @return</span> Whether the Uri authority is DownloadsProvider.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isDownloadsDocument</span>(Uri uri) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"com.android.providers.downloads.documents"</span>.equals(uri.getAuthority());
+    }
+
+
+    <span class="hljs-javadoc">/**
+     *<span class="hljs-javadoctag"> @param</span> uri The Uri to check.
+     *<span class="hljs-javadoctag"> @return</span> Whether the Uri authority is MediaProvider.
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isMediaDocument</span>(Uri uri) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"com.android.providers.media.documents"</span>.equals(uri.getAuthority());
+    }
+}
+</code></pre>
+
+<p><strong>完整代码下载地址：<a href="https://download.csdn.net/download/to_be_designer/10343940" rel="nofollow">下载地址</a></strong></p>            </div>
+						<link href="https://csdnimg.cn/release/phoenix/mdeditor/markdown_views-258a4616f7.css" rel="stylesheet">
+                      </div>
+	</article>
+</div>
+
+  <div class="hide-article-box hide-article-pos text-center">
+    <div class="border"></div>
+        <a class="btn article-footer-btn" id="btn-readmore" data-track-view='{"mod":"popu_376","con":",https://blog.csdn.net/To_be_Designer/article/details/79914043,"}' data-track-click='{"mod":"popu_376","con":",https://blog.csdn.net/To_be_Designer/article/details/79914043,"}'>阅读更多</a>
+        <a class="btn article-footer-btn article-footer-bookmark-btn" >
+      <svg class="icon no-active hover-hide" aria-hidden="true">
+        <use xlink:href="#csdnc-bookmark"></use>
+      </svg>
+      <span>收藏</span>
+    </a>
+    <div class="btn article-footer-btn  bds_weixin article-footer-share-btn" data-cmd="weixin" title="分享">
+      <svg class="icon no-active hover-hide" aria-hidden="true">
+        <use xlink:href="#csdnc-share"></use>
+      </svg>
+      <span>分享</span>
+      <div class="bdsharebuttonbox">
+        <a href="#"class="bds_weixin clear-share-style-article-footer" data-cmd="weixin" title="分享"></a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+  (function(){
+    function collection(){
+      if (currentUserName) {
+        var markObj = {};
+            markObj.imgUrl ='https://csdnimg.cn/release/phoenix/static_blog/images/appqr.png';
+        var markPrompt = (new window.csdn.publicPrompt).init(markObj);
+        var maeked = '您已经收藏过';
+        if (!$(this).hasClass("liked")) {
+          $.ajax({
+            url: 'https://my.csdn.net/my/favorite/do_add/2',
+            dataType: 'json',
+            type: 'POST',
+            xhrFields: {
+              withCredentials: true
+            },
+            data: {
+              title: articleTit,
+              url: 'https://blog.csdn.net/To_be_Designer/article/details/79914043',
+              share: 1,
+              map_name: ''
+            },
+            success: function(data) {
+
+              if (data.succ == 1) {
+                $('.btn-bookmark').addClass("liked");
+                $('.article-footer-bookmark-btn').addClass("liked").children('span').text('已收藏');
+                markPrompt.show({})
+                // alert('收藏成功,可以在个人中心查看我的收藏');
+              } else {
+                if (data.msg === "您已经收藏过") {
+                  $('.btn-bookmark').addClass("liked");
+                  $('.article-footer-bookmark-btn').addClass("liked").children('span').text('已收藏');
+                  markPrompt.show({
+                    titleStr: maeked
+                  })
+                }else{
+                  alert(data.msg);
+
+                }
+              }
+            }
+          });
+        } else {
+          markPrompt.show({
+            titleStr: maeked
+          })
+        }
+      } else {
+        window.csdn.loginBox.show();
+      }
+    }
+    function permissionCheck(dom){
+      var returnData = false;
+      switch (true) {
+        case currentUserPermission && userPermission:
+          clearReadMoreBtn(dom)
+          returnData = true;
+          break;
+        case userPermission:
+          dom.text('VIP阅读');
+          returnData = false;
+          break;
+        default:
+
+      }
+      return returnData;
+    }
+    window.csdn = window.csdn ? window.csdn : {};
+    window.csdn.articleCollection = collection;
+    function clearReadMoreBtn(dom) {
+      if(userPermission && !(dom instanceof jQuery)) {
+        window.open('https://mall.csdn.net/vip?utm_source=brv')
+        return false;
+      }
+      dom = dom instanceof jQuery ? dom : $(this);
+      $("div.article_content").removeAttr("style");
+      dom.parent().remove();
+    }
+    function setArticleH(btnReadmore,posi){
+      var winH = $(window).height();
+      var articleBox = $("div.article_content");
+      var artH = articleBox.height();
+      if(artH > winH*posi){
+        articleBox.css({
+          'height':winH*posi+'px',
+          'overflow':'hidden'
+        })
+        btnReadmore.click(clearReadMoreBtn)
+      }else{
+        btnReadmore.parent().remove()
+      }
+    }
+    var btnReadmore = $("#btn-readmore");
+    $('.article-footer-bookmark-btn').click(window.csdn.articleCollection)
+    if(btnReadmore.length>0){
+      if (permissionCheck(btnReadmore)) {
+        return false;
+      }
+      if(currentUserName){
+        setArticleH(btnReadmore,3);
+      }else{
+        setArticleH(btnReadmore,0.5);
+      }
+    }else{
+      $('.hide-article-box').addClass('hide-article-style');
+    }
+  })()
+</script>
+<script>
+		$(".MathJax").remove();
+		if($('div.markdown_views pre.prettyprint code.hljs').length > 0 ){
+				$('div.markdown_views')[0].className = 'markdown_views';
+		}
+</script>
+        <div id="dmp_ad_58"><div id="kp_box_58" data-pid="58" data-track-view='{"mod":"kp_popu_58-402","con":",,"}' data-track-click='{"mod":"kp_popu_58-402","con":",,"}'><div style="width:100%;background:#fff;border:3px solid #fff;">
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<div id="three_ad1" class="mediav_ad" ></div>
+<script>
+                                               NEWS_FEED({
+                w: 900,
+                h : 100,
+                showid : 'ztvJV8',
+                placeholderId: "three_ad1",
+                inject : 'define',
+                define : {
+                    imagePosition : 'left',
+                    imageBorderRadius : 0,
+                    imageWidth: 90,
+                    imageHeight: 68,
+                    imageFill : 'clip',
+                    displayImage : true,
+                    displayTitle : true,
+                    titleFontSize: 18,
+                    titleFontColor: '#000',
+                    titleFontFamily : 'Lato,-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif',
+                    titleFontWeight: 'bold',
+                    titlePaddingTop : 0,
+                    titlePaddingRight : 0,
+                    titlePaddingBottom : 5,
+                    titlePaddingLeft : 16,
+                    displayDesc : true,
+                    descFontSize: 14,
+                    descFontColor: '#8e959a',
+                    descFontFamily : 'Microsoft YaHei',
+                    paddingTop : 20,
+                    paddingRight : 0,
+                    paddingBottom : 0,
+                    paddingLeft : 20,
+                    backgroundColor: '#fff',
+                    hoverColor: '#000'
+                      }
+                  })
+                                        </script>
+</div></div></div>        <a id="commentBox"></a>
+<div class="comment-box">
+
+	<div class="comment-edit-box d-flex">
+		<a id="commentsedit"></a>
+		<div class="user-img">
+			<a href="javascript:void(0);" target="_blank">
+				<img class="show_loginbox" src="//g.csdnimg.cn/static/user-img/anonymous-User-img.png">
+			</a>
+		</div>
+		<form id="commentform">
+			<input type="hidden" id="comment_replyId">
+			<textarea class="comment-content" name="comment_content" id="comment_content" placeholder="想对作者说点什么"></textarea>
+			<div class="opt-box"> <!-- d-flex -->
+				<div id="ubbtools" class="add_code">
+					<a href="#insertcode" code="code" target="_self"><i class="icon iconfont icon-daima"></i></a>
+				</div>
+				<input type="hidden" id="comment_replyId" name="comment_replyId">
+				<input type="hidden" id="article_id" name="article_id" value="79914043">
+				<input type="hidden" id="comment_userId" name="comment_userId" value="">
+				<input type="hidden" id="commentId" name="commentId" value="">
+				<div style="display: none;" class="csdn-tracking-statistics tracking-click" data-mod="popu_384"><a href="#" target="_blank" class="comment_area_btn">发表评论</a></div>
+				<div class="dropdown" id="myDrap">
+					<a class="dropdown-face d-flex align-items-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+					<div class="txt-selected text-truncate">添加代码片</div>
+					<svg class="icon d-block" aria-hidden="true">
+						<use xlink:href="#csdnc-triangledown"></use>
+					</svg>
+					</a>
+					<ul class="dropdown-menu" id="commentCode" aria-labelledby="drop4">
+						<li><a data-code="html">HTML/XML</a></li>
+						<li><a data-code="objc">objective-c</a></li>
+						<li><a data-code="ruby">Ruby</a></li>
+						<li><a data-code="php">PHP</a></li>
+						<li><a data-code="csharp">C</a></li>
+						<li><a data-code="cpp">C++</a></li>
+						<li><a data-code="javascript">JavaScript</a></li>
+						<li><a data-code="python">Python</a></li>
+						<li><a data-code="java">Java</a></li>
+						<li><a data-code="css">CSS</a></li>
+						<li><a data-code="sql">SQL</a></li>
+						<li><a data-code="plain">其它</a></li>
+					</ul>
+				</div>
+				<div class="right-box">
+					<span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span>
+					<input type="submit" class="btn btn-sm btn-red btn-comment" value="发表评论">
+				</div>
+			</div>
+		</form>
+	</div>
+
+		<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div>
+		</div>
+	</div>
+</div>
+        <div class="recommend-box">
+            		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/zzw222222/article/details/50969401,BlogCommendFromBaidu_0"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/zzw222222/article/details/50969401,BlogCommendFromBaidu_0"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/zzw222222/article/details/50969401" target="_blank" title="android开发系列之一—创建一个简单的webapp">
+				<h4 class="text-truncate oneline">
+						<em>android开发</em>系列之一—创建一个简单的webapp				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">03-24</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2878</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/zzw222222/article/details/50969401" target="_blank" title="android开发系列之一—创建一个简单的webapp">
+							<span class="desc oneline">怎么样把html5网站编译为一个app?做了以下尝试：1.用wex5直接把一个html5网站网址如：http://115.28.89.67:8097/wap-interface/ 打包，之后发现问题：...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/zzw222222">来自：	<span class="blog_title"> 码农帮的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/lizhengwei1989/article/details/73380589,BlogCommendESEnWordWeight_1"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/lizhengwei1989/article/details/73380589,BlogCommendESEnWordWeight_1"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/lizhengwei1989/article/details/73380589" target="_blank" title="Android WebView和Native交互的3种方式总结">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>WebView</em>和Native交互的3种方式总结				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">06-17</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3214</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/lizhengwei1989/article/details/73380589" target="_blank" title="Android WebView和Native交互的3种方式总结">
+							<span class="desc oneline">androidwebview和原生交互</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/lizhengwei1989">来自：	<span class="blog_title"> 寻梦</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/To_be_Designer/article/details/79891496,BlogCommendESEnWordWeight_2"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/To_be_Designer/article/details/79891496,BlogCommendESEnWordWeight_2"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/To_be_Designer/article/details/79891496" target="_blank" title="Android 原生开发、H5、React-Native开发特点">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>原生</em>开发、<em>H5</em>、React-Native开发特点				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">04-11</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2561</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/To_be_Designer/article/details/79891496" target="_blank" title="Android 原生开发、H5、React-Native开发特点">
+							<span class="desc oneline">本文转载自Android原生开发、H5、React-Native使用利弊和场景技术分享　　由于工作原因，由Android原生开发转向ReactNative开发，ReactNative是从去年5月份开始...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/To_be_Designer">来自：	<span class="blog_title"> To_be_Designer</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_59" data-pid="59" data-track-view='{"mod":"kp_popu_59-78","con":",,"}' data-track-click='{"mod":"kp_popu_59-78","con":",,"}'><script type="text/javascript">
+    (function() {
+        var s = "_" + Math.random().toString(36).slice(2);
+        document.write('<div style="" id="' + s + '"></div>');
+        (window.slotbydup = window.slotbydup || []).push({
+            id: "u3491668",
+            container:  s
+        });
+    })();
+</script>
+<!-- 多条广告如下脚本只需引入一次 -->
+<script type="text/javascript" src="//cpro.baidustatic.com/cpro/ui/c.js" async="async" defer="defer" ></script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/shma1022/article/details/76191267,BlogCommendESEnWordWeight_3"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/shma1022/article/details/76191267,BlogCommendESEnWordWeight_3"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/shma1022/article/details/76191267" target="_blank" title="Android+H5开发">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>+<em>H5</em>开发				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">07-27</span>
+						<span class="read-num hover-hide">
+              阅读数
+							4643</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/shma1022/article/details/76191267" target="_blank" title="Android+H5开发">
+							<span class="desc oneline">安卓和h5混合开发(这里只是记录一下这几天的成果，有的逻辑自己也不太清楚，只是记录一下流程，其他的一些解释什么的等弄明白了再回来补上)，这里参考的是appcan官网（吐槽一下，文档写的真不咋地）1.新...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/shma1022">来自：	<span class="blog_title"> 早起看日落的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_28844947/article/details/75284545,BlogCommendFromGuangxin_4"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_28844947/article/details/75284545,BlogCommendFromGuangxin_4"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_28844947/article/details/75284545" target="_blank" title="WebView打不开或者显示异常可能原因">
+				<h4 class="text-truncate oneline">
+						<em>WebView</em>打不开或者显示异常可能原因				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">07-18</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3445</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_28844947/article/details/75284545" target="_blank" title="WebView打不开或者显示异常可能原因">
+							<span class="desc oneline">原生对webview内的网页操作空间有限，基本上是设置的问题可能的疑难杂症问题和解决方案1.Cannotreadproperty‘XXX’ofundefinedatnullHTML5Storage主要...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_28844947">来自：	<span class="blog_title"> qq_28844947的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_35605213/article/details/81286177,BlogCommendFromGuangxin_5"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_35605213/article/details/81286177,BlogCommendFromGuangxin_5"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_35605213/article/details/81286177" target="_blank" title="WebView加载失败或网络异常时，替换WebView的错误界面；">
+				<h4 class="text-truncate oneline">
+						<em>WebView</em>加载失败或网络异常时，替换<em>WebView</em>的错误界面；				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">07-30</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3148</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_35605213/article/details/81286177" target="_blank" title="WebView加载失败或网络异常时，替换WebView的错误界面；">
+							<span class="desc oneline">WebView在加载失败时会显示一个失败原因的界面，各个手机显示的界面还都不一样，部分手机还会把Url显示出来；我们要做的就是统一加载失败的界面；大概思路：在WebView这个控件上面再覆盖一个Vie...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_35605213">来自：	<span class="blog_title"> qq_35605213的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/yhy123456q/article/details/77714836,BlogCommendFromGuangxin_6"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/yhy123456q/article/details/77714836,BlogCommendFromGuangxin_6"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/yhy123456q/article/details/77714836" target="_blank" title="Android原生webView加载h5页面出现加载错乱不完全问题">
+				<h4 class="text-truncate oneline">
+						<em>Android</em><em>原生</em><em>webView</em>加载<em>h5</em>页面出现加载错乱不完全问题				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-30</span>
+						<span class="read-num hover-hide">
+              阅读数
+							4358</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/yhy123456q/article/details/77714836" target="_blank" title="Android原生webView加载h5页面出现加载错乱不完全问题">
+							<span class="desc oneline">一、错误的效果图：二、正确的效果图：三、解决方案：webView.getSettings().setDomStorageEnabled(true);//打开DOM存储API四、参考文章：地址：点击打开...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/yhy123456q">来自：	<span class="blog_title"> yhy123456q的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/zhanggx512/article/details/82907570,BlogCommendFromGuangxin_7"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/zhanggx512/article/details/82907570,BlogCommendFromGuangxin_7"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/zhanggx512/article/details/82907570" target="_blank" title="Android WebView 加载的网页不能缩放">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>WebView</em> 加载的网页不能缩放				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-30</span>
+						<span class="read-num hover-hide">
+              阅读数
+							585</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/zhanggx512/article/details/82907570" target="_blank" title="Android WebView 加载的网页不能缩放">
+							<span class="desc oneline">https://blog.csdn.net/sophiedjf/article/details/41512787</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/zhanggx512">来自：	<span class="blog_title"> zhanggx512的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_60" data-pid="60" data-track-view='{"mod":"kp_popu_60-43","con":",,"}' data-track-click='{"mod":"kp_popu_60-43","con":",,"}'><div id="three_ad8" class="mediav_ad" ></div>
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<script>
+                                               NEWS_FEED({
+                w: 900,
+                h : 84,
+                showid : 'Afihld',
+                placeholderId: "three_ad8",
+                inject : 'define',
+                define : {
+                    imagePosition : 'left',
+                    imageBorderRadius : 3,
+                    imageWidth: 90,
+                    imageHeight: 60,
+                    imageFill : 'clip',
+                    displayImage : true,
+                    displayTitle : true,
+                    titleFontSize: 18,
+                    titleFontColor: '#000',
+                    titleFontFamily : 'Lato,-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif',
+                    titleFontWeight: 'bold',
+                    titlePaddingTop : 0,
+                    titlePaddingRight : 0,
+                    titlePaddingBottom : 5,
+                    titlePaddingLeft : 16,
+                    displayDesc : true,
+                    descFontSize: 14,
+                    descFontColor: '#8e959a',
+                    descFontFamily : 'Microsoft Yahei',
+                    paddingTop : 10,
+                    paddingRight : 0,
+                    paddingBottom : 0,
+                    paddingLeft : 0,
+                    backgroundColor: '#fff',
+                    hoverColor: '#000'
+                      }
+                  })
+                                        </script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/haiyinshushe/article/details/80758472,BlogCommendFromGuangxin_8"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/haiyinshushe/article/details/80758472,BlogCommendFromGuangxin_8"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/haiyinshushe/article/details/80758472" target="_blank" title="Android webview加载网页">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>webview</em>加载网页				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">06-21</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1304</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/haiyinshushe/article/details/80758472" target="_blank" title="Android webview加载网页">
+							<span class="desc oneline">webview尝试（一）在线加载网页(例百度)webview布局很简单xml如下&amp;amp;lt;?xmlversion=&amp;quot;1.0&amp;quot;encoding=&amp;quot;utf-8&amp;quot...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/haiyinshushe">来自：	<span class="blog_title"> haiyinshushe的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/DickyQie/article/details/61413419,BlogCommendFromQuerySearch_9"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/DickyQie/article/details/61413419,BlogCommendFromQuerySearch_9"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/DickyQie/article/details/61413419" target="_blank" title="android------引导页两种实现方式（原生和WebView网页实现）">
+				<h4 class="text-truncate oneline">
+						<em>android</em>------引导页两种实现方式（<em>原生</em>和<em>WebView</em>网页实现）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">03-11</span>
+						<span class="read-num hover-hide">
+              阅读数
+							903</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/DickyQie/article/details/61413419" target="_blank" title="android------引导页两种实现方式（原生和WebView网页实现）">
+							<span class="desc oneline">有的App当你第一次打开的是和常常会有引导页来描述一些App信息（功能，特点），当然也要做验证，验证第二次进入不进入引导页，直接进入App，此博客借助ViewPager来实现引导页，ViewPager...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/DickyQie">来自：	<span class="blog_title"> 切切歆语的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+          <div class="recommend-item-box blog-expert-recommend-box">
+				<div class="d-flex">
+					<div class="blog-expert-recommend">
+						<div class="blog-expert">
+							<div class="blog-expert-flexbox"></div>
+						</div>
+					</div>
+				</div>
+      </div>
+
+    			<div class="recommend-item-box recommend-box-ident recommend-download-box clearfix" data-track-view='{"mod":"popu_614","con":",https://download.csdn.net/download/manongmanongmanong/9882091,BlogCommendFromQuerySearch_10"}' data-track-click='{"mod":"popu_614","con":",https://download.csdn.net/download/manongmanongmanong/9882091,BlogCommendFromQuerySearch_10"}'>
+			<a href="https://download.csdn.net/download/manongmanongmanong/9882091" target="_blank">
+				<div class="content clearfix">
+					<div class="">
+						<h4 class="text-truncate oneline clearfix">
+							用<em>原生</em><em>webView</em>开发的安卓壳子						</h4>
+						<span class="data float-right">06-27</span>
+					</div>
+					<div class="desc oneline">
+							用原生webView开发的安卓壳子					</div>
+          <span class="type-show type-show-download">下载</span>
+				</div>
+			</a>
+		</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/ADVANCE_DJJ/article/details/78989139,BlogCommendFromQuerySearch_11"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/ADVANCE_DJJ/article/details/78989139,BlogCommendFromQuerySearch_11"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/ADVANCE_DJJ/article/details/78989139" target="_blank" title="Android中Webview与原生界面交互及二维码扫描功能实现">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>中<em>Webview</em>与<em>原生</em>界面交互及二维码扫描功能实现				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">01-06</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3549</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/ADVANCE_DJJ/article/details/78989139" target="_blank" title="Android中Webview与原生界面交互及二维码扫描功能实现">
+							<span class="desc oneline">版权声明：本文为博主原创文章，未经博主允许不得转载。最近项目中有一个新的需求，大致是这样的：APP中通过WebView展示一个第三方的HTML5界面，用户可以在HTML5界面中调用Android摄像头...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/ADVANCE_DJJ">来自：	<span class="blog_title"> ADVANCE_DJJ的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_35605213/article/details/80060455,BlogCommendFromQuerySearch_12"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_35605213/article/details/80060455,BlogCommendFromQuerySearch_12"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_35605213/article/details/80060455" target="_blank" title="Android原生和H5交互；Android和H5混合开发；WebView点击H5界面跳转到Android原生界面。">
+				<h4 class="text-truncate oneline">
+						<em>Android</em><em>原生</em>和<em>H5</em>交互；<em>Android</em>和<em>H5</em>混合开发；<em>WebView</em>点击<em>H5</em>界面跳转到<em>Android</em><em>原生</em>界面。				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">04-24</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3273</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_35605213/article/details/80060455" target="_blank" title="Android原生和H5交互；Android和H5混合开发；WebView点击H5界面跳转到Android原生界面。">
+							<span class="desc oneline">当时业务的需求是这样的，H5有一个活动商品列表的界面，IOS和Android共用这一个界面，点击商品可以跳转到Android原生的商品详情界面并传递商品ID； 大概就是点击H5界面跳转到Android...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_35605213">来自：	<span class="blog_title"> qq_35605213的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_61" data-pid="61" data-track-view='{"mod":"kp_popu_61-557","con":",,"}' data-track-click='{"mod":"kp_popu_61-557","con":",,"}'><div id="three_ad13" class="mediav_ad" ></div>
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<script>
+                                               NEWS_FEED({
+                w: 852,
+                h : 60,
+                showid : 'GNKXx7',
+                placeholderId: "three_ad13",
+                inject : 'define',
+                define : {
+                    imagePosition : 'left',
+                    imageBorderRadius : 3,
+                    imageWidth: 90,
+                    imageHeight: 60,
+                    imageFill : 'clip',
+                    displayImage : true,
+                    displayTitle : true,
+                    titleFontSize: 18,
+                    titleFontColor: '#000',
+                    titleFontFamily : 'Lato,-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif',
+                    titleFontWeight: 'bold',
+                    titlePaddingTop : 0,
+                    titlePaddingRight : 0,
+                    titlePaddingBottom : 5,
+                    titlePaddingLeft : 16,
+                    displayDesc : true,
+                    descFontSize: 14,
+                    descFontColor: '#8e959a',
+                    descFontFamily : 'Microsoft Yahei',
+                    paddingTop : 0,
+                    paddingRight : 0,
+                    paddingBottom : 0,
+                    paddingLeft : 0,
+                    backgroundColor: '#fff',
+                    hoverColor: '#000'
+                      }
+                  })
+                                        </script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/ding_tk/article/details/51375158,BlogCommendFromQuerySearch_13"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/ding_tk/article/details/51375158,BlogCommendFromQuerySearch_13"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/ding_tk/article/details/51375158" target="_blank" title="Webview与原生交互传值">
+				<h4 class="text-truncate oneline">
+						<em>Webview</em>与<em>原生</em>交互传值				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">05-11</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2973</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/ding_tk/article/details/51375158" target="_blank" title="Webview与原生交互传值">
+							<span class="desc oneline">UIWebView*webView=[[UIWebViewalloc]initWithFrame:CGRectMake(0,0,MainScreenWidth,MainScreenHeight)];W...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/ding_tk">来自：	<span class="blog_title"> ding_tk的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/u012210186/article/details/52608090,BlogCommendFromQuerySearch_14"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/u012210186/article/details/52608090,BlogCommendFromQuerySearch_14"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/u012210186/article/details/52608090" target="_blank" title="Android WebView：性能优化不得不说的事">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>WebView</em>：性能优化不得不说的事				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-21</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/u012210186/article/details/52608090" target="_blank" title="Android WebView：性能优化不得不说的事">
+							<span class="desc oneline">原文链接：http://motalks.cn/2016/09/11/Android-WebView-JavaScript-3/版权归作者所有！Mo说：大家通过前两篇文章想必都能顺利的get到WebVi...</span>
+						</a>
+						  <span class="blog_title_box oneline no-title">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/shuaiyou_comon/article/details/78563796,BlogCommendFromQuerySearch_15"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/shuaiyou_comon/article/details/78563796,BlogCommendFromQuerySearch_15"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/shuaiyou_comon/article/details/78563796" target="_blank" title="Android原生登录同步到webview的网页">
+				<h4 class="text-truncate oneline">
+						<em>Android</em><em>原生</em>登录同步到<em>webview</em>的网页				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">11-17</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1100</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/shuaiyou_comon/article/details/78563796" target="_blank" title="Android原生登录同步到webview的网页">
+							<span class="desc oneline">本地的登录界面与网页的登录信息如何同步的问题：做混合开发的时候经常遇到的问题是，本地实现登录界面，登录成功后，使用webView加载网页，这时网页会提示需要登录。这显然是不友好的。如何把本地的登录信息...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/shuaiyou_comon">来自：	<span class="blog_title"> shuaiyou_comon的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/bird3014/article/details/73135262,BlogCommendFromQuerySearch_16"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/bird3014/article/details/73135262,BlogCommendFromQuerySearch_16"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/bird3014/article/details/73135262" target="_blank" title="Android开发--WebView简单录音功能的实现">
+				<h4 class="text-truncate oneline">
+						<em>Android开发</em>--<em>WebView</em>简单录音功能的实现				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">06-12</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3309</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/bird3014/article/details/73135262" target="_blank" title="Android开发--WebView简单录音功能的实现">
+							<span class="desc oneline">WebView实现本地录音</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/bird3014">来自：	<span class="blog_title"> bird3014的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/Alangao420983/article/details/78491023,BlogCommendFromQuerySearch_17"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/Alangao420983/article/details/78491023,BlogCommendFromQuerySearch_17"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/Alangao420983/article/details/78491023" target="_blank" title="Android WebView 回退到原生goback(） 遭遇重定向">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>WebView</em> 回退到<em>原生</em>goback(） 遭遇重定向				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">11-09</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1130</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/Alangao420983/article/details/78491023" target="_blank" title="Android WebView 回退到原生goback(） 遭遇重定向">
+							<span class="desc oneline">1.项目遇到调用H5的时候，永远返回不到原生的界面的尴尬。遇到的坑，来分享给大家。导致这个问题的是由于前端页面的加载了很多的链接的时候，从一个url到另一个url，最后返回的时候永远的回到是到首页，也...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/Alangao420983">来自：	<span class="blog_title"> Alangao的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_62" data-pid="62" data-track-view='{"mod":"kp_popu_62-556","con":",,"}' data-track-click='{"mod":"kp_popu_62-556","con":",,"}'><div id="three_ad18" class="mediav_ad" ></div>
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<script>
+                                               NEWS_FEED({
+                w: 852,
+                h : 60,
+                showid : 'Afihld',
+                placeholderId: "three_ad18",
+                inject : 'define',
+                define : {
+                    imagePosition : 'left',
+                    imageBorderRadius : 3,
+                    imageWidth: 90,
+                    imageHeight: 60,
+                    imageFill : 'clip',
+                    displayImage : true,
+                    displayTitle : true,
+                    titleFontSize: 18,
+                    titleFontColor: '#000',
+                    titleFontFamily : 'Lato,-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif',
+                    titleFontWeight: 'bold',
+                    titlePaddingTop : 0,
+                    titlePaddingRight : 0,
+                    titlePaddingBottom : 5,
+                    titlePaddingLeft : 16,
+                    displayDesc : true,
+                    descFontSize: 14,
+                    descFontColor: '#8e959a',
+                    descFontFamily : 'Microsoft Yahei',
+                    paddingTop : 0,
+                    paddingRight : 0,
+                    paddingBottom : 0,
+                    paddingLeft : 0,
+                    backgroundColor: '#fff',
+                    hoverColor: '#000'
+                      }
+                  })
+                                        </script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/robert_cysy/article/details/77072961,BlogCommendFromQuerySearch_18"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/robert_cysy/article/details/77072961,BlogCommendFromQuerySearch_18"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/robert_cysy/article/details/77072961" target="_blank" title="Android与H5互调使用cordova的WebView，插件调用，插件编写">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>与<em>H5</em>互调使用cordova的<em>WebView</em>，插件调用，插件编写				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-10</span>
+						<span class="read-num hover-hide">
+              阅读数
+							6318</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/robert_cysy/article/details/77072961" target="_blank" title="Android与H5互调使用cordova的WebView，插件调用，插件编写">
+							<span class="desc oneline">AndroidWebViews在大型原生Android工程中嵌入一个含有cordova的WebView（制作混合应用，原生页面+H5页面）...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/robert_cysy">来自：	<span class="blog_title"> robert's home</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_32536991/article/details/88314799,BlogCommendFromQuerySearch_19"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_32536991/article/details/88314799,BlogCommendFromQuerySearch_19"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_32536991/article/details/88314799" target="_blank" title="Android WebView 或者 HTML 转化成 PDF 原生实现">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>WebView</em> 或者 HTML 转化成 PDF <em>原生</em>实现				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">03-08</span>
+						<span class="read-num hover-hide">
+              阅读数
+							90</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_32536991/article/details/88314799" target="_blank" title="Android WebView 或者 HTML 转化成 PDF 原生实现">
+							<span class="desc oneline">以前有个需求就是要把webview打印成pdf保存到本地然后上传的问题,然后百度google了一大堆,大部分还都是用第三方的库来实现,然而并不太好用,偶尔看了一篇博客用原生的API来打印,这两天再找那...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_32536991">来自：	<span class="blog_title"> 盼盼的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    			<div class="recommend-item-box recommend-box-ident recommend-download-box clearfix" data-track-view='{"mod":"popu_614","con":",https://download.csdn.net/download/qq_31046737/9447754,BlogCommendFromQuerySearch_20"}' data-track-click='{"mod":"popu_614","con":",https://download.csdn.net/download/qq_31046737/9447754,BlogCommendFromQuerySearch_20"}'>
+			<a href="https://download.csdn.net/download/qq_31046737/9447754" target="_blank">
+				<div class="content clearfix">
+					<div class="">
+						<h4 class="text-truncate oneline clearfix">
+							安卓 问卷调查Demo <em>原生</em>代码						</h4>
+						<span class="data float-right">02-29</span>
+					</div>
+					<div class="desc oneline">
+							android 问卷调查Demo,android原生代码，不是webView加载H5，比较容易理解，大家可以改改					</div>
+          <span class="type-show type-show-download">下载</span>
+				</div>
+			</a>
+		</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/villa_mou/article/details/78728417,BlogCommendFromQuerySearch_21"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/villa_mou/article/details/78728417,BlogCommendFromQuerySearch_21"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/villa_mou/article/details/78728417" target="_blank" title="深坑之Webview,解决H5调用android相机拍照和录像">
+				<h4 class="text-truncate oneline">
+						深坑之<em>Webview</em>,解决<em>H5</em>调用<em>android</em>相机拍照和录像				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">12-06</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/villa_mou/article/details/78728417" target="_blank" title="深坑之Webview,解决H5调用android相机拍照和录像">
+							<span class="desc oneline">最近在开发过程中遇到一个问题,主要是调用第三方的实名认证,需要拍照和录像,办过支付宝大宝卡和腾讯的大王卡的都知道这玩意,办卡的时候就需要进行实名认证,人脸识别本来第三方平台(xxx流量公司)说的是直接...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/villa_mou">来自：	<span class="blog_title"> villa_mou的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/JimTrency/article/details/75314659,BlogCommendFromQuerySearch_22"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/JimTrency/article/details/75314659,BlogCommendFromQuerySearch_22"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/JimTrency/article/details/75314659" target="_blank" title="android webview中嵌套的h5页面下载apk">
+				<h4 class="text-truncate oneline">
+						<em>android</em> <em>webview</em>中嵌套的<em>h5</em>页面下载apk				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">07-18</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1944</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/JimTrency/article/details/75314659" target="_blank" title="android webview中嵌套的h5页面下载apk">
+							<span class="desc oneline">继承一个接口，DownloadListener，然后加载重载函数@OverridepublicvoidonDownloadStart(Stringurl,StringuserAgent,Stringc...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/JimTrency">来自：	<span class="blog_title"> JimTrency的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_63" data-pid="63" data-track-view='{"mod":"kp_popu_63-809","con":",,"}' data-track-click='{"mod":"kp_popu_63-809","con":",,"}'><script
+    async="async"
+    charset="utf-8"
+    src="https://shared.ydstatic.com/js/yatdk/3.0.1/stream.js"
+    data-id="6cb24153a03289ff3597c7aab4b69fe9"
+    data-div-Style="width:100%;"
+data-tit-Style="margin-bottom: 6px; font-size: 18px; line-height: 24px; color: #3d3d3d;display: inline-block;font-weight:bold;"
+data-des-Style="font-size: 13px; line-height: 22px; white-space: normal; color: #999;"
+data-img-Style="float:left;margin-right:15px;width:90px;height:60px;">
+</script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_36435508/article/details/78165007,BlogCommendFromQuerySearch_23"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_36435508/article/details/78165007,BlogCommendFromQuerySearch_23"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_36435508/article/details/78165007" target="_blank" title="postMessage方法使app内嵌页面跳转原生页面">
+				<h4 class="text-truncate oneline">
+						postMessage方法使app内嵌页面跳转<em>原生</em>页面				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">10-06</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1664</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_36435508/article/details/78165007" target="_blank" title="postMessage方法使app内嵌页面跳转原生页面">
+							<span class="desc oneline">functionpostMessage($id,$type,$typeide,$categoryId,$good_id,$url){//参数varu=navigator.userAgent;varis...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_36435508">来自：	<span class="blog_title"> Lemon的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    			<div class="recommend-item-box recommend-box-ident recommend-download-box clearfix" data-track-view='{"mod":"popu_614","con":",https://download.csdn.net/download/zhangyjpisces/10116027,BlogCommendFromQuerySearch_24"}' data-track-click='{"mod":"popu_614","con":",https://download.csdn.net/download/zhangyjpisces/10116027,BlogCommendFromQuerySearch_24"}'>
+			<a href="https://download.csdn.net/download/zhangyjpisces/10116027" target="_blank">
+				<div class="content clearfix">
+					<div class="">
+						<h4 class="text-truncate oneline clearfix">
+							<em>android</em><em>原生</em>登录 +<em>webview</em> 记住登录状态						</h4>
+						<span class="data float-right">11-13</span>
+					</div>
+					<div class="desc oneline">
+							在进行APP+H5混合开发的时候，一些功能是用native方法实现的,如登陆，一些功能是用H5实现的。所以往往需要将在native方法登陆的状态同步到H5中避免再次登陆。这种情况在Android开发中比较常见，因为Android不会自动同...					</div>
+          <span class="type-show type-show-download">下载</span>
+				</div>
+			</a>
+		</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_34517710/article/details/70239934,BlogCommendFromQuerySearch_25"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_34517710/article/details/70239934,BlogCommendFromQuerySearch_25"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_34517710/article/details/70239934" target="_blank" title="WebView_返回键返回到上一个HTML界面不回到源生界面的方法">
+				<h4 class="text-truncate oneline">
+						<em>WebView</em>_返回键返回到上一个HTML界面不回到源生界面的方法				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">04-19</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1325</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_34517710/article/details/70239934" target="_blank" title="WebView_返回键返回到上一个HTML界面不回到源生界面的方法">
+							<span class="desc oneline">/***实现按下源生返回键，返回到上一个网页的方法，直接复制即可，*此方法为监听返回按键时的处理**/@OverridepublicbooleanonKeyDown(intkeyCode,KeyEve...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_34517710">来自：	<span class="blog_title"> Flipped_九蛋的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/u013424496/article/details/51991541,BlogCommendFromQuerySearch_26"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/u013424496/article/details/51991541,BlogCommendFromQuerySearch_26"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/u013424496/article/details/51991541" target="_blank" title="android 的webView加载h5，和h5的交互（java和JavaScript的交互）">
+				<h4 class="text-truncate oneline">
+						<em>android</em> 的<em>webView</em>加载<em>h5</em>，和<em>h5</em>的交互（java和JavaScript的交互）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-02</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/u013424496/article/details/51991541" target="_blank" title="android 的webView加载h5，和h5的交互（java和JavaScript的交互）">
+							<span class="desc oneline">Android提供了一个很强大的WebView控件用来处理Web网页，而在网页中，JavaScript又是一个很举足轻重的脚本。本文将介绍如何实现Java代码和Javascript代码的相互调用。（通...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/u013424496">来自：	<span class="blog_title"> 彭思正的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/you__are_my_sunshine/article/details/55505665,BlogCommendFromQuerySearch_27"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/you__are_my_sunshine/article/details/55505665,BlogCommendFromQuerySearch_27"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/you__are_my_sunshine/article/details/55505665" target="_blank" title="安卓中原生与H5（webview）之间交互时cookie的同步">
+				<h4 class="text-truncate oneline">
+						安卓中<em>原生</em>与<em>H5</em>（<em>webview</em>）之间交互时cookie的同步				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">02-17</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/you__are_my_sunshine/article/details/55505665" target="_blank" title="安卓中原生与H5（webview）之间交互时cookie的同步">
+							<span class="desc oneline">一、问题描述最近的项目中使用了H5页面和原生之间的交互，主要是原生通过js调用webview来加载H5页面，但是在进行通信时，涉及到一个cookie同步的问题，如果没处理好，真的是问题多多，纠结了好久...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/you__are_my_sunshine">来自：	<span class="blog_title"> you__are_my_sunshine的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_64" data-pid="64" data-track-view='{"mod":"kp_popu_64-81","con":",,"}' data-track-click='{"mod":"kp_popu_64-81","con":",,"}'><div id="three_ad28" class="mediav_ad" ></div>
+<script type="text/javascript" src="//static.mediav.com/js/mvf_news_feed.js"></script>
+<script>
+                                               NEWS_FEED({
+                w: 852,
+                h : 60,
+                showid : 'Afihld',
+                placeholderId: "three_ad28",
+                inject : 'define',
+                define : {
+                    imagePosition : 'left',
+                    imageBorderRadius : 3,
+                    imageWidth: 90,
+                    imageHeight: 60,
+                    imageFill : 'clip',
+                    displayImage : true,
+                    displayTitle : true,
+                    titleFontSize: 18,
+                    titleFontColor: '#000',
+                    titleFontFamily : 'Lato,-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif',
+                    titleFontWeight: 'bold',
+                    titlePaddingTop : 0,
+                    titlePaddingRight : 0,
+                    titlePaddingBottom : 5,
+                    titlePaddingLeft : 16,
+                    displayDesc : true,
+                    descFontSize: 14,
+                    descFontColor: '#8e959a',
+                    descFontFamily : 'Microsoft Yahei',
+                    paddingTop : 0,
+                    paddingRight : 0,
+                    paddingBottom : 0,
+                    paddingLeft : 0,
+                    backgroundColor: '#fff',
+                    hoverColor: '#000'
+                      }
+                  })
+                                        </script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/fengyeNom1/article/details/78105159,BlogCommendFromQuerySearch_28"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/fengyeNom1/article/details/78105159,BlogCommendFromQuerySearch_28"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/fengyeNom1/article/details/78105159" target="_blank" title="Android WebView-H5交互上传文件(包括图片)">
+				<h4 class="text-truncate oneline">
+						<em>Android</em> <em>WebView</em>-<em>H5</em>交互上传文件(包括图片)				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-26</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2932</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/fengyeNom1/article/details/78105159" target="_blank" title="Android WebView-H5交互上传文件(包括图片)">
+							<span class="desc oneline">WebView在4.4前后的区别非常大,比如对URL跳转的格式,对JS的注入声明等等,4.4以后的WebView已经是chromium内核,有多强大就无需我赘述.说这些,其实也是为了说明也因为WebV...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/fengyeNom1">来自：	<span class="blog_title"> fengyeNom1的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_25897137/article/details/77370152,BlogCommendFromQuerySearch_29"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_25897137/article/details/77370152,BlogCommendFromQuerySearch_29"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_25897137/article/details/77370152" target="_blank" title="安卓原生APP内嵌webview调试">
+				<h4 class="text-truncate oneline">
+						安卓<em>原生</em>APP内嵌<em>webview</em>调试				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-18</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1168</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_25897137/article/details/77370152" target="_blank" title="安卓原生APP内嵌webview调试">
+							<span class="desc oneline">在chrome://inspect/#devices下查看设备如果inspect出现devtools出现空白，请排除一下情况1，能够访问google.com2，手机开启usb调试模式3，允许电脑访问手...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_25897137">来自：	<span class="blog_title"> Qiaer的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/caoyan0829/article/details/84982911,BlogCommendFromQuerySearch_30"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/caoyan0829/article/details/84982911,BlogCommendFromQuerySearch_30"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/caoyan0829/article/details/84982911" target="_blank" title="H5嵌入原生的webview的注意事项">
+				<h4 class="text-truncate oneline">
+						<em>H5</em>嵌入<em>原生</em>的<em>webview</em>的注意事项				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">12-13</span>
+						<span class="read-num hover-hide">
+              阅读数
+							196</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/caoyan0829/article/details/84982911" target="_blank" title="H5嵌入原生的webview的注意事项">
+							<span class="desc oneline">1. 不要使用ES6的语法，原生不支持。例： let 的使用，在原生中就不被解析。  还要使用var...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/caoyan0829">来自：	<span class="blog_title"> caoyan0829的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/ONLYMETAGAIN/article/details/78865949,BlogCommendFromQuerySearch_31"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/ONLYMETAGAIN/article/details/78865949,BlogCommendFromQuerySearch_31"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/ONLYMETAGAIN/article/details/78865949" target="_blank" title="ANDROID HTML重定向之后返回原生view处理">
+				<h4 class="text-truncate oneline">
+						<em>ANDROID</em> HTML重定向之后返回<em>原生</em>view处理				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">12-21</span>
+						<span class="read-num hover-hide">
+              阅读数
+							694</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/ONLYMETAGAIN/article/details/78865949" target="_blank" title="ANDROID HTML重定向之后返回原生view处理">
+							<span class="desc oneline">一直都在做HTML与原生混合式开发，前面遇到一个问题，我们的合作企业，合入我们的APP之后，出现页面跳转页面死循环的问题。1.下面是我们APP装载HTML后页面的逻辑||原理这里把合作公司的HTML简...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/ONLYMETAGAIN">来自：	<span class="blog_title"> CherryChen</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/wenshan_jiang/article/details/83654245,BlogCommendFromQuerySearch_32"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/wenshan_jiang/article/details/83654245,BlogCommendFromQuerySearch_32"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/wenshan_jiang/article/details/83654245" target="_blank" title="安卓使用webView加载H5页面时出现的缩放问题">
+				<h4 class="text-truncate oneline">
+						安卓使用<em>webView</em>加载<em>H5</em>页面时出现的缩放问题				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">11-02</span>
+						<span class="read-num hover-hide">
+              阅读数
+							316</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/wenshan_jiang/article/details/83654245" target="_blank" title="安卓使用webView加载H5页面时出现的缩放问题">
+							<span class="desc oneline">1.安卓端使用webView加载H5页面时由于手机的不同可能会出现以下情况：在手机浏览器中打开H5页面显示正常，但是在app内的webView中嵌套了H5页面时会出现H5页面被放大。使得屏幕中放不下H...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/wenshan_jiang">来自：	<span class="blog_title"> wenshan_jiang的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_65" data-pid="65" data-track-view='{"mod":"kp_popu_65-809","con":",,"}' data-track-click='{"mod":"kp_popu_65-809","con":",,"}'><script
+    async="async"
+    charset="utf-8"
+    src="https://shared.ydstatic.com/js/yatdk/3.0.1/stream.js"
+    data-id="6cb24153a03289ff3597c7aab4b69fe9"
+    data-div-Style="width:100%;"
+data-tit-Style="margin-bottom: 6px; font-size: 18px; line-height: 24px; color: #3d3d3d;display: inline-block;font-weight:bold;"
+data-des-Style="font-size: 13px; line-height: 22px; white-space: normal; color: #999;"
+data-img-Style="float:left;margin-right:15px;width:90px;height:60px;">
+</script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/shenmafuyunnan/article/details/52395593,BlogCommendFromQuerySearch_33"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/shenmafuyunnan/article/details/52395593,BlogCommendFromQuerySearch_33"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/shenmafuyunnan/article/details/52395593" target="_blank" title="Html5 + android原生 混合式开发(一)">
+				<h4 class="text-truncate oneline">
+						Html5 + <em>android</em><em>原生</em> 混合式开发(一)				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-01</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/shenmafuyunnan/article/details/52395593" target="_blank" title="Html5 + android原生 混合式开发(一)">
+							<span class="desc oneline">Html5+android原生混合式开发</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/shenmafuyunnan">来自：	<span class="blog_title"> shenmafuyunnan的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/mingchashui/article/details/73456795,BlogCommendFromQuerySearch_34"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/mingchashui/article/details/73456795,BlogCommendFromQuerySearch_34"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/mingchashui/article/details/73456795" target="_blank" title="android使用webview加载H5页面">
+				<h4 class="text-truncate oneline">
+						<em>android</em>使用<em>webview</em>加载<em>H5</em>页面				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">06-19</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3214</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/mingchashui/article/details/73456795" target="_blank" title="android使用webview加载H5页面">
+							<span class="desc oneline">webview加载H5，简单显示：1、布局文件中添加控件（或动态添加）activity中生成控件2、webview必须设置支持js的属性：webview.getSettings().setJavaSc...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/mingchashui">来自：	<span class="blog_title"> mingchashui的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_31490071/article/details/80676270,BlogCommendFromQuerySearch_35"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_31490071/article/details/80676270,BlogCommendFromQuerySearch_35"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_31490071/article/details/80676270" target="_blank" title="Android混合开发中遇到内置H5界面点击标题栏返回按键无法后退问题跟踪解决">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>混合开发中遇到内置<em>H5</em>界面点击标题栏返回按键无法后退问题跟踪解决				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">06-13</span>
+						<span class="read-num hover-hide">
+              阅读数
+							769</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_31490071/article/details/80676270" target="_blank" title="Android混合开发中遇到内置H5界面点击标题栏返回按键无法后退问题跟踪解决">
+							<span class="desc oneline">最近在做项目开发，在Android原生代码中采用WebView呈现H5界面内容后，发现界面标题栏的返回按钮点击后无任何反应，自己也是查阅了很多的资料和内容，为了避免以后再次遇到这样的问题，特此记录。问...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_31490071">来自：	<span class="blog_title"> 心若向阳，无谓悲伤的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    			<div class="recommend-item-box recommend-box-ident recommend-download-box clearfix" data-track-view='{"mod":"popu_614","con":",https://download.csdn.net/download/j844808402/9603930,BlogCommendFromQuerySearch_36"}' data-track-click='{"mod":"popu_614","con":",https://download.csdn.net/download/j844808402/9603930,BlogCommendFromQuerySearch_36"}'>
+			<a href="https://download.csdn.net/download/j844808402/9603930" target="_blank">
+				<div class="content clearfix">
+					<div class="">
+						<h4 class="text-truncate oneline clearfix">
+							<em>android</em> <em>Webview</em>（<em>H5</em>）中调用拍照和相册						</h4>
+						<span class="data float-right">08-15</span>
+					</div>
+					<div class="desc oneline">
+							代码主要是参考一个大神的代码，如果觉得是侵权，请联系我，立马删除，谢谢。
+我主要是做了一些适配。					</div>
+          <span class="type-show type-show-download">下载</span>
+				</div>
+			</a>
+		</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_33923079/article/details/52969420,BlogCommendFromQuerySearch_37"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_33923079/article/details/52969420,BlogCommendFromQuerySearch_37"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_33923079/article/details/52969420" target="_blank" title="Android中WebView点击事件的拦截跳转到原生的界面">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>中<em>WebView</em>点击事件的拦截跳转到<em>原生</em>的界面				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">10-30</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_33923079/article/details/52969420" target="_blank" title="Android中WebView点击事件的拦截跳转到原生的界面">
+							<span class="desc oneline">我们可以知道，android中嵌入WebView可以快速实现app开发上线，这个时候android和webview之间的交互就变得十分重要了，到目前为止交互的形式遇到的有三种：第一：拦截H5界面的控件...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_33923079">来自：	<span class="blog_title"> 星光小站</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_66" data-pid="66" data-track-view='{"mod":"kp_popu_66-881","con":",,"}' data-track-click='{"mod":"kp_popu_66-881","con":",,"}'><script src="https://nbrecsys.4paradigm.com/resource/cus/csdn/sdk-csdn-render.js"></script>
+<div
+  id="_4paradigm_T38_render"
+  class="_paradigm_T_ads_render _4paradigm_box recommend-item-box clearfix"
+></div>
+<script>
+  //  渲染T38  传入 渲染位置的id和渲染位置的标记
+  p4CSDNRender_T("_4paradigm_T38_render", "T38");
+</script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/smxueer/article/details/80953432,BlogCommendFromQuerySearch_38"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/smxueer/article/details/80953432,BlogCommendFromQuerySearch_38"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/smxueer/article/details/80953432" target="_blank" title="android  webview加载h5页面，遇见后台重定向的页面，点击返回键一直退不出去进入到加载页面">
+				<h4 class="text-truncate oneline">
+						<em>android</em>  <em>webview</em>加载<em>h5</em>页面，遇见后台重定向的页面，点击返回键一直退不出去进入到加载页面				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">07-07</span>
+						<span class="read-num hover-hide">
+              阅读数
+							939</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/smxueer/article/details/80953432" target="_blank" title="android  webview加载h5页面，遇见后台重定向的页面，点击返回键一直退不出去进入到加载页面">
+							<span class="desc oneline">项目是webview+h5wan完成的，除啦自己网站的h5还有地方用到第三方的web页面，其中有个页面有重定向到另外一个页面，造成了页面无法后退，后退到上个页面，又重定向到之前界面，重定向源页面也被加...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/smxueer">来自：	<span class="blog_title"> smxueer的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_36013216/article/details/79013982,BlogCommendFromQuerySearch_39"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_36013216/article/details/79013982,BlogCommendFromQuerySearch_39"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_36013216/article/details/79013982" target="_blank" title="使用webview来做一个h5页面的安卓端外壳">
+				<h4 class="text-truncate oneline">
+						使用<em>webview</em>来做一个<em>h5</em>页面的安卓端外壳				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">01-09</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3203</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_36013216/article/details/79013982" target="_blank" title="使用webview来做一个h5页面的安卓端外壳">
+							<span class="desc oneline">使用webview来做一个h5页面的安卓端外壳之前工作上需要做一个安卓端来加载项目里写的h5页面,主要思路就是使用webview进行加载页面,而一些原生的操作如打开相册、打开相机、扫描二维码等通过安卓...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_36013216">来自：	<span class="blog_title"> emmmmm</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/lyglostangel/article/details/48546241,BlogCommendFromQuerySearch_40"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/lyglostangel/article/details/48546241,BlogCommendFromQuerySearch_40"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/lyglostangel/article/details/48546241" target="_blank" title="Android内嵌html5添加原生微信分享的解决办法">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>内嵌html5添加<em>原生</em>微信分享的解决办法				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-18</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3462</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/lyglostangel/article/details/48546241" target="_blank" title="Android内嵌html5添加原生微信分享的解决办法">
+							<span class="desc oneline">有一段时间没有瞎折腾了。这周一刚上班萌主过来反映说：微信里面打开聚客宝，分享功能是可以的（这里是用微信自身的js-sdk实现的），但是在android应用里面打开点击就没反应了；接下来狡猾的丁丁在产品...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/lyglostangel">来自：	<span class="blog_title"> lyglostangel的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/fan_gangliang/article/details/59539196,BlogCommendFromQuerySearch_41"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/fan_gangliang/article/details/59539196,BlogCommendFromQuerySearch_41"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/fan_gangliang/article/details/59539196" target="_blank" title="基于cordova实现的webview实现与h5的交互">
+				<h4 class="text-truncate oneline">
+						基于cordova实现的<em>webview</em>实现与<em>h5</em>的交互				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">03-02</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3440</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/fan_gangliang/article/details/59539196" target="_blank" title="基于cordova实现的webview实现与h5的交互">
+							<span class="desc oneline">该片文章讲述项目中遇到的问题，以及相关优化细节。一、项目背景1、项目需要支持hybrid应用，所以部分提供h5调用的通用js保存在客户端本地。优点有：访问速度快和无需额外数据流量。2、项目主页都是h5...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/fan_gangliang">来自：	<span class="blog_title"> fan_gangliang的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/yuan514168845/article/details/53134229,BlogCommendFromQuerySearch_42"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/yuan514168845/article/details/53134229,BlogCommendFromQuerySearch_42"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/yuan514168845/article/details/53134229" target="_blank" title="Android富文本编辑器开发之旅">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>富文本编辑器开发之旅				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">11-12</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2044</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/yuan514168845/article/details/53134229" target="_blank" title="Android富文本编辑器开发之旅">
+							<span class="desc oneline">技术选型从确定要开发富文本编辑器到正式立项，差不多只有一周的时间，在这周内我结合公司已有的业务调研了市面上富文本编辑器的实现方式。主要有以下两种:Android原生实现，主要通过EditText,Sp...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/yuan514168845">来自：	<span class="blog_title"> yuan514168845的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_67" data-pid="67" data-track-view='{"mod":"kp_popu_67-882","con":",,"}' data-track-click='{"mod":"kp_popu_67-882","con":",,"}'><script src="https://nbrecsys.4paradigm.com/resource/cus/csdn/sdk-csdn-render.js"></script>
+<div
+  id="_4paradigm_T43_render"
+  class="_paradigm_T_ads_render _4paradigm_box recommend-item-box clearfix"
+></div>
+<script>
+  //  渲染T43  传入 渲染位置的id和渲染位置的标记
+  p4CSDNRender_T("_4paradigm_T43_render", "T43");
+</script></div></div>
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/xmj10086/article/details/72898829,BlogCommendFromQuerySearch_43"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/xmj10086/article/details/72898829,BlogCommendFromQuerySearch_43"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/xmj10086/article/details/72898829" target="_blank" title="webview向上滚动与下拉刷新冲突（X5WebView）">
+				<h4 class="text-truncate oneline">
+						<em>webview</em>向上滚动与下拉刷新冲突（X5<em>WebView</em>）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">06-07</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3717</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/xmj10086/article/details/72898829" target="_blank" title="webview向上滚动与下拉刷新冲突（X5WebView）">
+							<span class="desc oneline">1、问题最近项目中需要在webview添加个下拉刷新，继而出现了滑动冲突问题。使用swiperefreshLayout，webview（或者X5WebView）嵌套使用，webview下划滚动没有问题...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/xmj10086">来自：	<span class="blog_title"> 逗比小可爱的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/daijin888888/article/details/50009387,BlogCommendFromQuerySearch_44"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/daijin888888/article/details/50009387,BlogCommendFromQuerySearch_44"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/daijin888888/article/details/50009387" target="_blank" title="android html唤醒APP（原生）">
+				<h4 class="text-truncate oneline">
+						<em>android</em> html唤醒APP（<em>原生</em>）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">11-24</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/daijin888888/article/details/50009387" target="_blank" title="android html唤醒APP（原生）">
+							<span class="desc oneline">写在前面：有个需求，在微信的公众号上，通过打开网页，唤醒已经安装在手机上的APP，事实上，直接在微信上打开不可行，因为微信对这类唤醒有屏蔽，原因见后文。但是可以通过右上角的在浏览器中打开进入网页，再唤...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/daijin888888">来自：	<span class="blog_title"> 厚积而薄发，谋定而后动</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/u014522840/article/details/77198695,BlogCommendFromQuerySearch_45"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/u014522840/article/details/77198695,BlogCommendFromQuerySearch_45"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/u014522840/article/details/77198695" target="_blank" title="android webview与h5交互时所遇到的坑">
+				<h4 class="text-truncate oneline">
+						<em>android</em> <em>webview</em>与<em>h5</em>交互时所遇到的坑				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-15</span>
+						<span class="read-num hover-hide">
+              阅读数
+							4844</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/u014522840/article/details/77198695" target="_blank" title="android webview与h5交互时所遇到的坑">
+							<span class="desc oneline">现在h5与原生的混合开发越来越多，身为一名移动端开发人员，必须要跟随潮流步伐，掌握基本的与h5的交互技能。手头正好有个demo，算是为开始准备混合开发的android伙伴们准备的开胃菜。也许有同学该有...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/u014522840">来自：	<span class="blog_title"> u014522840的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq386405828/article/details/53766170,BlogCommendFromQuerySearch_46"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq386405828/article/details/53766170,BlogCommendFromQuerySearch_46"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq386405828/article/details/53766170" target="_blank" title="Android利用WebView与h5交互的几种形式">
+				<h4 class="text-truncate oneline">
+						<em>Android</em>利用<em>WebView</em>与<em>h5</em>交互的几种形式				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">12-20</span>
+						<span class="read-num hover-hide">
+              阅读数
+							756</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq386405828/article/details/53766170" target="_blank" title="Android利用WebView与h5交互的几种形式">
+							<span class="desc oneline">1Android利用WebView与h5交互的几种形式1.android中利用webview调用网页上的js代码。Android中可以通过webview来实现和js的交互，在程序中调用js代码，只需要...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq386405828">来自：	<span class="blog_title"> qq386405828的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/ShuSheng0007/article/details/83049516,BlogCommendFromQuerySearch_47"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/ShuSheng0007/article/details/83049516,BlogCommendFromQuerySearch_47"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/ShuSheng0007/article/details/83049516" target="_blank" title="Android开发之Webview中原生与JS交互">
+				<h4 class="text-truncate oneline">
+						<em>Android开发</em>之<em>Webview</em>中<em>原生</em>与JS交互				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">10-14</span>
+						<span class="read-num hover-hide">
+              阅读数
+							289</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/ShuSheng0007/article/details/83049516" target="_blank" title="Android开发之Webview中原生与JS交互">
+							<span class="desc oneline">文章目录概述使用场景交互方式Java调用JS代码JS调用Java代码总结概述由于手机硬件资源的快速提升，使得采用混合开发的可能性逐渐成为现实并且流行起来。Android开发中最为简单的方式就是通过We...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/ShuSheng0007">来自：	<span class="blog_title"> ShuSheng007的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+    <div class="recommend-item-box recommend-ad-box"><div id="kp_box_68" data-pid="68" data-track-view='{"mod":"kp_popu_68-883","con":",,"}' data-track-click='{"mod":"kp_popu_68-883","con":",,"}'><!-- T48 位置 -->
+<script src="https://nbrecsys.4paradigm.com/resource/cus/csdn/sdk-csdn-render.js"></script>
+<div
+  id="_4paradigm_T48_render"
+  class="_paradigm_T_ads_render _4paradigm_box recommend-item-box clearfix"
+></div>
+<script>
+  //  渲染T48  传入 渲染位置的id和渲染位置的标记
+  p4CSDNRender_T("_4paradigm_T48_render", "T48");
+</script></div></div>
+
+    			<div class="recommend-item-box recommend-box-ident recommend-download-box clearfix" data-track-view='{"mod":"popu_614","con":",https://download.csdn.net/download/yshr1991/11002232,BlogCommendFromQuerySearch_48"}' data-track-click='{"mod":"popu_614","con":",https://download.csdn.net/download/yshr1991/11002232,BlogCommendFromQuerySearch_48"}'>
+			<a href="https://download.csdn.net/download/yshr1991/11002232" target="_blank">
+				<div class="content clearfix">
+					<div class="">
+						<h4 class="text-truncate oneline clearfix">
+							前端<em>H5</em>获取<em>Android</em><em>原生</em>相册文件和拍照功能直接重新<em>WebView</em>的方法即可						</h4>
+						<span class="data float-right">03-06</span>
+					</div>
+					<div class="desc oneline">
+							前端H5获取Android原生相册文件和拍照功能,比如H5的&amp;lt;input type&amp;gt;类型，ios不用做任何处理，而Android需要对webview重新					</div>
+          <span class="type-show type-show-download">下载</span>
+				</div>
+			</a>
+		</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/Half_open/article/details/76618976,BlogCommendFromQuerySearch_49"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/Half_open/article/details/76618976,BlogCommendFromQuerySearch_49"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/Half_open/article/details/76618976" target="_blank" title="混合开发-webview和原生交互">
+				<h4 class="text-truncate oneline">
+						混合开发-<em>webview</em>和<em>原生</em>交互				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-03</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2511</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/Half_open/article/details/76618976" target="_blank" title="混合开发-webview和原生交互">
+							<span class="desc oneline">混合开发在移动开发中很常见，比如qq中的运动，厘米秀等功能都是用网页实现的。混合开发中一个重要的功能就是网页和原生接口的数据交互，下面将实现一个小demo.新建一个activity,布局如下...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/Half_open">来自：	<span class="blog_title"> Halfopen的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/roguesir/article/details/77104246,BlogCommendHotData_0"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/roguesir/article/details/77104246,BlogCommendHotData_0"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/roguesir/article/details/77104246" target="_blank" title="人脸检测工具face_recognition的安装与应用">
+				<h4 class="text-truncate oneline">
+						人脸检测工具face_recognition的安装与应用				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-11</span>
+						<span class="read-num hover-hide">
+              阅读数
+							6万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/roguesir/article/details/77104246" target="_blank" title="人脸检测工具face_recognition的安装与应用">
+							<span class="desc oneline">人脸检测工具face_recognition的安装与应用</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/roguesir">来自：	<span class="blog_title"> roguesir的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/ymj7150697/article/details/7384126,BlogCommendHotData_1"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/ymj7150697/article/details/7384126,BlogCommendHotData_1"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/ymj7150697/article/details/7384126" target="_blank" title="expat介绍文档翻译">
+				<h4 class="text-truncate oneline">
+						expat介绍文档翻译				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">03-22</span>
+						<span class="read-num hover-hide">
+              阅读数
+							4万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/ymj7150697/article/details/7384126" target="_blank" title="expat介绍文档翻译">
+							<span class="desc oneline">原文地址：http://www.xml.com/pub/a/1999/09/expat/index.html
+
+
+因为需要用，所以才翻译了这个文档。但总归赖于英语水平很有限，翻译出来的中文有可能...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/ymj7150697">来自：	<span class="blog_title"> ymj7150697的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/u012874222/article/details/79400154,BlogCommendHotData_2"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/u012874222/article/details/79400154,BlogCommendHotData_2"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/u012874222/article/details/79400154" target="_blank" title="卡顿监测之真正轻量级的卡顿监测工具BlockDetectUtil（仅一个类）">
+				<h4 class="text-truncate oneline">
+						卡顿监测之真正轻量级的卡顿监测工具BlockDetectUtil（仅一个类）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">03-01</span>
+						<span class="read-num hover-hide">
+              阅读数
+							3089</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/u012874222/article/details/79400154" target="_blank" title="卡顿监测之真正轻量级的卡顿监测工具BlockDetectUtil（仅一个类）">
+							<span class="desc oneline">一、背景    一直以来，应用的流畅度都关乎着用户的体验性，而体验性好的产品自然而然会受到更多用户的欢迎，所以对于广大的工程师来说，界面的卡顿优化一直是Android应用性能优化的重要一环。而当前应用...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/u012874222">来自：	<span class="blog_title"> u012874222的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/themagickeyjianan/article/details/52386981,BlogCommendHotData_3"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/themagickeyjianan/article/details/52386981,BlogCommendHotData_3"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/themagickeyjianan/article/details/52386981" target="_blank" title="python图片处理类之~PIL.Image模块(ios android icon图标自动生成处理)">
+				<h4 class="text-truncate oneline">
+						python图片处理类之~PIL.Image模块(ios android icon图标自动生成处理)				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-31</span>
+						<span class="read-num hover-hide">
+              阅读数
+							7万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/themagickeyjianan/article/details/52386981" target="_blank" title="python图片处理类之~PIL.Image模块(ios android icon图标自动生成处理)">
+							<span class="desc oneline">1.从pyCharm提示下载PIL包
+
+ http://www.pythonware.com/products/pil/
+
+
+
+2.解压后，进入到目录下
+
+
+cd /Users/jianan/Dow...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/themagickeyjianan">来自：	<span class="blog_title"> 专注于cocos+unity+服务器全栈</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/SweetTool/article/details/70224459,BlogCommendHotData_4"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/SweetTool/article/details/70224459,BlogCommendHotData_4"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/SweetTool/article/details/70224459" target="_blank" title="ubuntu 16.04 英文版命令行安装中文语言包">
+				<h4 class="text-truncate oneline">
+						ubuntu 16.04 英文版命令行安装中文语言包				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">04-18</span>
+						<span class="read-num hover-hide">
+              阅读数
+							6万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/SweetTool/article/details/70224459" target="_blank" title="ubuntu 16.04 英文版命令行安装中文语言包">
+							<span class="desc oneline">ubuntu桌位大众化的linux系统大家最熟悉不过，但是ubuntu的server版本也相当出色。作为习惯使用英文系统的人难免会遇到中文不支持情况，桌面版安装语言包非常方便，可是如果只能ssh远程连...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/SweetTool">来自：	<span class="blog_title"> SweetTool的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq_29350001/article/details/77941902,BlogCommendHotData_5"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq_29350001/article/details/77941902,BlogCommendHotData_5"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq_29350001/article/details/77941902" target="_blank" title="DM368开发 -- 编码并实时播放">
+				<h4 class="text-truncate oneline">
+						DM368开发 -- 编码并实时播放				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-12</span>
+						<span class="read-num hover-hide">
+              阅读数
+							8137</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq_29350001/article/details/77941902" target="_blank" title="DM368开发 -- 编码并实时播放">
+							<span class="desc oneline">最近正好又用到 DM368 开发板，就将之前做的编解码的项目总结一下。话说一年多没碰，之前做的笔记全忘记是个什么鬼了。还好整理了一下出图像了。不过再看看做的这个东西，真是够渣的，只能作为参考了。项目效...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq_29350001">来自：	<span class="blog_title"> 不积跬步，无以至千里</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qilixuening/article/details/77503631,BlogCommendHotData_6"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qilixuening/article/details/77503631,BlogCommendHotData_6"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qilixuening/article/details/77503631" target="_blank" title="win10下配置GPU加速的Keras框架">
+				<h4 class="text-truncate oneline">
+						win10下配置GPU加速的Keras框架				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-23</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qilixuening/article/details/77503631" target="_blank" title="win10下配置GPU加速的Keras框架">
+							<span class="desc oneline">不久之前，开始学习深度学习，这个时候发现用CPU计算的Keras框架性能明显不够用了，但当时随便弄了一下没能成功实现GPU加速。于是后来一次重装系统，从头详细地重现这个过程。Python环境搭建要搭建...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qilixuening">来自：	<span class="blog_title"> qilixuening的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/hwhsong/article/details/78294965,BlogCommendHotData_7"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/hwhsong/article/details/78294965,BlogCommendHotData_7"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/hwhsong/article/details/78294965" target="_blank" title="EasyUI - 一个简单的后台管理系统入门实例">
+				<h4 class="text-truncate oneline">
+						EasyUI - 一个简单的后台管理系统入门实例				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">10-20</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/hwhsong/article/details/78294965" target="_blank" title="EasyUI - 一个简单的后台管理系统入门实例">
+							<span class="desc oneline">采用EasyUI 1.4.x 版本，默认default风格，异步加载页面，多Tab页展示，使用JSON文件模拟从后台动态获取数据。...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/hwhsong">来自：	<span class="blog_title"> 般若</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/maoyuanming0806/article/details/78067446,BlogCommendHotData_8"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/maoyuanming0806/article/details/78067446,BlogCommendHotData_8"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/maoyuanming0806/article/details/78067446" target="_blank" title="搭建图片服务器《二》-linux安装nginx">
+				<h4 class="text-truncate oneline">
+						搭建图片服务器《二》-linux安装nginx				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-22</span>
+						<span class="read-num hover-hide">
+              阅读数
+							4万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/maoyuanming0806/article/details/78067446" target="_blank" title="搭建图片服务器《二》-linux安装nginx">
+							<span class="desc oneline">nginx是个好东西，Nginx (engine x) 是一个高性能的HTTP和反向代理服务器，也是一个IMAP/POP3/SMTP服务器。Nginx是由伊戈尔·赛索耶夫为俄罗斯访问量第二的Rambl...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/maoyuanming0806">来自：	<span class="blog_title"> maoyuanming0806的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/yuzhiqiang_1993/article/details/76152454,BlogCommendHotData_9"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/yuzhiqiang_1993/article/details/76152454,BlogCommendHotData_9"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/yuzhiqiang_1993/article/details/76152454" target="_blank" title="fragment清除页面数据（重新加载布局）">
+				<h4 class="text-truncate oneline">
+						fragment清除页面数据（重新加载布局）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">07-27</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/yuzhiqiang_1993/article/details/76152454" target="_blank" title="fragment清除页面数据（重新加载布局）">
+							<span class="desc oneline">上一篇博客介绍了如何解决Fragment重叠的问题，有需要的同学可以看一下，底部有demo下载。
+直通车：完美解决Fragment重叠本篇博客我们来说一下怎么让fragment重新加载布局资源文件。...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/yuzhiqiang_1993">来自：	<span class="blog_title"> 喻志强的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/qq574857122/article/details/16361033,BlogCommendHotData_10"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/qq574857122/article/details/16361033,BlogCommendHotData_10"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/qq574857122/article/details/16361033" target="_blank" title="强连通分量及缩点tarjan算法解析">
+				<h4 class="text-truncate oneline">
+						强连通分量及缩点tarjan算法解析				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">11-16</span>
+						<span class="read-num hover-hide">
+              阅读数
+							59万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/qq574857122/article/details/16361033" target="_blank" title="强连通分量及缩点tarjan算法解析">
+							<span class="desc oneline">强连通分量：
+简言之 就是找环（每条边只走一次，两两可达）
+孤立的一个点也是一个连通分量
+
+使用tarjan算法 在嵌套的多个环中优先得到最大环( 最小环就是每个孤立点）
+
+定义：
+int Ti...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/qq574857122">来自：	<span class="blog_title"> 九野的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/slwsf/article/details/83264271,BlogCommendHotData_11"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/slwsf/article/details/83264271,BlogCommendHotData_11"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/slwsf/article/details/83264271" target="_blank" title="Spring2.5中文文档">
+				<h4 class="text-truncate oneline">
+						Spring2.5中文文档				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">08-06</span>
+						<span class="read-num hover-hide">
+              阅读数
+							64</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/slwsf/article/details/83264271" target="_blank" title="Spring2.5中文文档">
+							<span class="desc oneline">该地址有中文文档的下载
+是2.5版本的
+非常不错
+http://karan.iteye.com/blog/212975</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/slwsf">来自：	<span class="blog_title"> slwsf的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/gefangshuai/article/details/50328451,BlogCommendHotData_12"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/gefangshuai/article/details/50328451,BlogCommendHotData_12"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/gefangshuai/article/details/50328451" target="_blank" title="关于SpringBoot bean无法注入的问题（与文件包位置有关）">
+				<h4 class="text-truncate oneline">
+						关于SpringBoot bean无法注入的问题（与文件包位置有关）				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">12-16</span>
+						<span class="read-num hover-hide">
+              阅读数
+							19万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/gefangshuai/article/details/50328451" target="_blank" title="关于SpringBoot bean无法注入的问题（与文件包位置有关）">
+							<span class="desc oneline">问题场景描述整个项目通过Maven构建，大致结构如下：
+核心Spring框架一个module spring-boot-base
+service和dao一个module server-core
+提供系统...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/gefangshuai">来自：	<span class="blog_title"> 开发随笔</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/weixin_39540045/article/details/80504449,BlogCommendHotData_13"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/weixin_39540045/article/details/80504449,BlogCommendHotData_13"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/weixin_39540045/article/details/80504449" target="_blank" title="C++优先队列的使用">
+				<h4 class="text-truncate oneline">
+						C++优先队列的使用				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">05-30</span>
+						<span class="read-num hover-hide">
+              阅读数
+							900</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/weixin_39540045/article/details/80504449" target="_blank" title="C++优先队列的使用">
+							<span class="desc oneline">优先队列(priority queue)亦即数据结构中的堆，是计算机科学中一类特殊的数据结构的统称。在队列中，调度程序反复提取队列中第一个作业并运行，因而实际情况中某些时间较短的任务将等待长时间才能结...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/weixin_39540045">来自：	<span class="blog_title"> weixin_39540045的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/wuchengzeng/article/details/50037611,BlogCommendHotData_14"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/wuchengzeng/article/details/50037611,BlogCommendHotData_14"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/wuchengzeng/article/details/50037611" target="_blank" title="jquery/js实现一个网页同时调用多个倒计时(最新的)">
+				<h4 class="text-truncate oneline">
+						jquery/js实现一个网页同时调用多个倒计时(最新的)				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">11-25</span>
+						<span class="read-num hover-hide">
+              阅读数
+							46万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/wuchengzeng/article/details/50037611" target="_blank" title="jquery/js实现一个网页同时调用多个倒计时(最新的)">
+							<span class="desc oneline">jquery/js实现一个网页同时调用多个倒计时(最新的)
+
+最近需要网页添加多个倒计时. 查阅网络,基本上都是千遍一律的不好用. 自己按需写了个.希望对大家有用. 有用请赞一个哦!
+
+
+
+//js
+...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/wuchengzeng">来自：	<span class="blog_title"> Websites</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/yu_xiaofei/article/details/13287899,BlogCommendHotData_15"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/yu_xiaofei/article/details/13287899,BlogCommendHotData_15"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/yu_xiaofei/article/details/13287899" target="_blank" title="SNMP协议详解&lt;二&gt;">
+				<h4 class="text-truncate oneline">
+						SNMP协议详解&lt;二&gt;				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">10-29</span>
+						<span class="read-num hover-hide">
+              阅读数
+							12万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/yu_xiaofei/article/details/13287899" target="_blank" title="SNMP协议详解&lt;二&gt;">
+							<span class="desc oneline">上一篇文章讲解了SNMP的基本架构，本篇文章将重点分析SNMP报文，并对不同版本（SNMPv1、v2c、v3）进行区别！
+
+四、SNMP协议数据单元
+
+在SNMP管理中，管理站（NMS）和代理（Age...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/yu_xiaofei">来自：	<span class="blog_title"> 假装在纽约</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/zd0303/article/details/7058457,BlogCommendHotData_16"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/zd0303/article/details/7058457,BlogCommendHotData_16"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/zd0303/article/details/7058457" target="_blank" title="MATLAB中注释一段程序">
+				<h4 class="text-truncate oneline">
+						MATLAB中注释一段程序				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">12-09</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/zd0303/article/details/7058457" target="_blank" title="MATLAB中注释一段程序">
+							<span class="desc oneline">在MATLAB中，可以注释一段程序。
+使用“%{”和“%}”。
+例如
+%{
+。。。
+%}
+即可。
+经典方法是用 if 0，但缺点是不够直观，注释掉的内容仍然保持代码的颜色。现在可以用
+...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/zd0303">来自：	<span class="blog_title"> 知识小屋</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/duxingzhe2012729/article/details/52576815,BlogCommendHotData_17"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/duxingzhe2012729/article/details/52576815,BlogCommendHotData_17"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/duxingzhe2012729/article/details/52576815" target="_blank" title="Sqlite（1）之分页查询">
+				<h4 class="text-truncate oneline">
+						Sqlite（1）之分页查询				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">09-18</span>
+						<span class="read-num hover-hide">
+              阅读数
+							2443</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/duxingzhe2012729/article/details/52576815" target="_blank" title="Sqlite（1）之分页查询">
+							<span class="desc oneline">转载地址：http://blog.csdn.net/lu1024188315/article/details/51734514
+
+
+SQLite分页查询有三种方法，它们都是基于SQLite SQ...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/duxingzhe2012729">来自：	<span class="blog_title"> duxingzhe2012729的博客</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/NYS001/article/details/12637201,BlogCommendHotData_18"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/NYS001/article/details/12637201,BlogCommendHotData_18"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/NYS001/article/details/12637201" target="_blank" title="蜂窝小区最短距离的坐标系解法">
+				<h4 class="text-truncate oneline">
+						蜂窝小区最短距离的坐标系解法				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">10-14</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/NYS001/article/details/12637201" target="_blank" title="蜂窝小区最短距离的坐标系解法">
+							<span class="desc oneline">如下图所示，蜂窝小区，以1为中心，顺时针编号，编号最大限定为100000。求任意两编号之间的最短距离。两个相邻小区的距离为1 示例：19到30的最短距离为5 实现如下三个接口： /**********...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/NYS001">来自：	<span class="blog_title"> NYS001的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/imj060336/article/details/2032765,BlogCommendHotData_19"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/imj060336/article/details/2032765,BlogCommendHotData_19"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/imj060336/article/details/2032765" target="_blank" title="用C语言实现有限状态机--读《C专家编程》">
+				<h4 class="text-truncate oneline">
+						用C语言实现有限状态机--读《C专家编程》				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">01-09</span>
+						<span class="read-num hover-hide">
+              阅读数
+							1万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/imj060336/article/details/2032765" target="_blank" title="用C语言实现有限状态机--读《C专家编程》">
+							<span class="desc oneline">        有限状态机(finite state machine)是一个数学概念，如果把它运用于程序中，可以发挥很大的作用。它是一种协议，用于有限数量的子程序(&quot;状态&quot;)的发展变化。每个子程序进行...</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/imj060336">来自：	<span class="blog_title"> Stay Hungry,Stay Foolish的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+    		<div class="recommend-item-box recommend-box-ident type_blog clearfix" data-track-view='{"mod":"popu_614","con":",https://blog.csdn.net/lubiaopan/article/details/6233517,BlogCommendHotData_20"}' data-track-click='{"mod":"popu_614","con":",https://blog.csdn.net/lubiaopan/article/details/6233517,BlogCommendHotData_20"}'>
+			<div class="content">
+				<a href="https://blog.csdn.net/lubiaopan/article/details/6233517" target="_blank" title=".NET和java的RSA互通，仅此而已">
+				<h4 class="text-truncate oneline">
+						.NET和java的RSA互通，仅此而已				</h4>
+				<div class="info-box d-flex align-content-center">
+					<p class="date-and-readNum oneline">
+						<span class="date hover-show">03-09</span>
+						<span class="read-num hover-hide">
+              阅读数
+							4万+</span>
+						</p>
+					</div>
+				</a>
+					<p class="content">
+						<a href="https://blog.csdn.net/lubiaopan/article/details/6233517" target="_blank" title=".NET和java的RSA互通，仅此而已">
+							<span class="desc oneline">RSA .net jva 互通 解决不能互通的问题</span>
+						</a>
+						  <span class="blog_title_box oneline ">
+							                <span class="type-show type-show-blog type-show-after">博文</span>
+                                  <a target="_blank" href="https://blog.csdn.net/lubiaopan">来自：	<span class="blog_title"> lubiaopan的专栏</span></a>
+                							              </span>
+					</p>
+			</div>
+					</div>
+
+
+
+        <div class="recommend-item-box type_hot_word">
+            <div class="content clearfix">
+        <div class="word float-left">
+                          <span>
+            <a href="https://edu.csdn.net/combos/o363_l0_t " target="_blank">
+            设计制作学习          </a></span>
+                                  <span>
+            <a href="https://edu.csdn.net/courses/o5329_s5330_k " target="_blank">
+            机器学习教程          </a></span>
+                                  <span>
+            <a href="https://edu.csdn.net/courses/o280_s351_k " target="_blank">
+            Objective-C培训          </a></span>
+                                  <span>
+            <a href="https://edu.csdn.net/combos/o7115_s388_l0_t " target="_blank">
+            交互设计视频教程          </a></span>
+                                  <span>
+            <a href="https://edu.csdn.net/course/play/5599/104252 " target="_blank">
+            颜色模型          </a></span>
+                        </div>
+      </div>
+                </div>
+
+
+            <div class="recommend-loading-box">
+                <img src='https://csdnimg.cn/release/phoenix/images/feedLoading.gif'>
+            </div>
+            <div class="recommend-end-box">
+                <p class="text-center">没有更多推荐了，<a href="https://blog.csdn.net/" class="c-blue c-blue-hover c-blue-focus">返回首页</a></p>
+            </div>
+        </div>
+{% endblock main %}
