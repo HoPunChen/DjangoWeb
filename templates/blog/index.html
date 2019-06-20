@@ -1,58 +1,63 @@
 {% extends 'base.html' %}
 
 {% block main %}
- <div class="filter-box d-flex align-items-center">
-      <form action="" id=seeOriginal>
-    <label class="chk-box" for="chkOriginal">
-      <input onchange="this.checked ? document.getElementById('seeOriginal').submit() : location.href = 'https://blog.csdn.net/To_be_Designer'" type="checkbox" name="t" value="1"  id="chkOriginal">只看原创</label></form>
-    <dl class="filter-sort-box d-flex align-items-center">
-    <dt>排序：</dt>
-    <dd><a href="javascript:void(0);" class="btn-filter-sort active" target="_self">默认</a></dd>
-    <dd><a href="https://blog.csdn.net/To_be_Designer?orderby=UpdateTime" class="btn-filter-sort " target="_self">按更新时间</a></dd>
-    <dd><a href="https://blog.csdn.net/To_be_Designer?orderby=ViewCount" class="btn-filter-sort " target="_self">按访问量</a></dd>
-    <dd><a class="btn btn-sm rss" href="https://blog.csdn.net/to_be_designer/rss/list">
-		<svg class="icon" aria-hidden="true">
-			<use xlink:href="#csdnc-rss"></use>
-		</svg>RSS订阅</a>
-    </dd>
-  </dl>
-</div>
+ <div class="zhongjian layui-col-md9">
+        <div class="you">
+        <div class="wenzhang0">
+            <form class="layui-form" action="">
+                <div class="layui-form-item" pane="">
+                    <div class="dingyi layui-input-block">
+                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="只看原创" checked="">
+                    </div>
+                </div>
+            </form>
+            <dl class="paixu">
+                <dt class="px01">排序：</dt>
+                <dd class="px03"><a href="">默认</a></dd>
+                <dd class="px02"><a href="" class="px04">按更新时间</a></dd>
+                <dd class="px02"><a href="" class="px04">按访问量</a></dd>
+            </dl>
+        </div>
+        <ul class="wxbd01">
+            {% for post in post_list %}
+        <li class="tuisong01">
 
+            <h2 class="tuisongbt" ><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+            <div class="tongsongnr">
+                {{ post.excerpt}}
+            </div>
+            <div class="boke01">
+              <div class="boke02">
+                <div class="boke05 layui-breadcrumb" lay-separator="·">
+                    <a class="buyao01">{{ post.created_time }}</a>
+                    <a href="" class="fenlei01 bokexf01">{{ post.category.name }}</a>
+                </div>
+              </div>
+                <div class="boke04">
+                    <div class="boke03 layui-breadcrumb" lay-separator="·">
+                    <a href="" class="bokexf01"><span class="nu">500</span> 阅读</a>
+                    <a href="" class="bokexf01"><span class="nu" >0</span> 评论</a>
+                    </div>
+                </div>
+            </div>
 
+            <!--<div class="piaofu">
+                <button class="layui-btn layui-btn-primary layui-btn-xs zhiding0">置顶</button>
+                <span class="gang">|</span>
+                <button class="layui-btn layui-btn-primary layui-btn-xs bianji0">编辑</button>
+                <span class="gang">|</span>
+                <button class="layui-btn layui-btn-primary layui-btn-xs shanchu0">删除</button>
+            </div>-->
+        </li>
+            {% empty %}
+            <h2 class="tuisongbt">暂时还没有发布的文章！</h2>
+            <div class="tongsongnr">
+                &nbsp&nbsp
+            </div>
 
-<div class="article-list">
-    {% for post in post_list %}
-    <div class="article-item-box csdn-tracking-statistics" data-articleid="48227697">
-    		<svg class="icon settop" aria-hidden="true">
-      <use xlink:href="#csdnc-settop"></use>
-    </svg>
-	    <h4 class="">
-        <a href="{{ post.get_absolute_url }}" target="_blank">
-        <span class="article-type type-1">
-            原        </span>
-          {{ post.title }}</a>
-    </h4>
-    <p class="content">
-      <a href="{{ post.get_absolute_url }}" target="_blank">
-        {{ post.excerpt }}</a>
-    </p>
-    <div class="info-box d-flex align-content-center">
-      <p>
-        <span class="date">{{ post.created_time }}</span>
-      </p>
-      <p class="point"></p>
-      <p>
-        <span class="read-num">阅读数 <span class="num">2244</span> </span>
-      </p>
-      <p class="point"></p>
-      <p>
-        <span class="read-num">评论数 <span class="num">2</span> </span>
-      </p>
+            {% endfor %}
+        </ul>
+            <div id="demo2"></div>
     </div>
-      </div>
-    {% empty %}
-    <div class="article-item-box"><p class="content">暂时还没有发布的文章！</p></div>
-    {% endfor %}
-    <div class="pagination-box" id="pageBox"></div>
-</div>
+
 {% endblock main %}

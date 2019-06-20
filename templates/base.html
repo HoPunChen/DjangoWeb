@@ -1,597 +1,288 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <!--meta-->
     <meta charset="UTF-8">
-    <link rel="canonical" href="https://blog.csdn.net/To_be_Designer"/>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="renderer" content="webkit"/>
-    <meta name="force-rendering" content="webkit"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="referrer" content="always">
-    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
-    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
-    <meta name="csdn-baidu-search"  content='{"autorun":true,"install":true,"keyword":"【To_be_Designer】能麻烦自己的尽量不麻烦别人！"}'>
-    <link href="https://csdnimg.cn/public/favicon.ico" rel="SHORTCUT ICON">
-    <title>NewBeeHive BLOG</title>
-    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/template/css/list-37775d3cab.min.css">
-    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/themes/skin-yellow/skin-yellow-2eefd34acf.min.css">
-    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script src="https://csdnimg.cn/rabbit/exposure-click/main-1.0.6.js"></script>
-    <script src="//g.csdnimg.cn/fixed-sidebar/1.1.3/fixed-sidebar.js" type="text/javascript"></script>
-    <!-- 新版上报 -->
-    <script src="//g.csdnimg.cn/track/1.2.4/track.js" type="text/javascript"></script>
-    <!-- 新版上报end -->
-        <link rel="stylesheet" href="{% static 'blog/css/sandalstrap.min.css' %}">
-    <style>
-        .MathJax, .MathJax_Message, .MathJax_Preview{
-            display: none
-        }
-    </style>
+    <title>NewbeeHive</title>
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/bk_list.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/bk_bknr.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/highlights/github.css' %}">
+
 </head>
-<!-- nodata 第三栏接口无数据时样式不变 -->
-<body class="nodata " >
-    <link rel="stylesheet" href="{% static 'blog/css/content_toolbar.min.css' %}">
-    <!--<script id="toolbar-tpl-scriptId" src="https://csdnimg.cn/public/common/toolbar/js/content_toolbar.js" type="text/javascript" domain="https://blog.csdn.net/"></script>-->
-    <link rel="stylesheet" href="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.css">
-    <div id="csdn-toolbar" class="csdn-toolbar tb_disnone ">
-        <div class="container row center-block ">
-            <ul class="pull-left left-menu clearfix" id="nav-left-menu">
-                <li><a href="https://www.csdn.net" title="CSDN首页" class=""><svg class="toolbar-icon" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#gonggong_csdnlogo_"></use></svg></a>            </li>
-                <li><a href="//www.csdn.net/" class="toolbar_to_feed" title="首页" style="margin-left:0">首页</a></li>
-                <li><a href="//blog.csdn.net/" class="active" title="博客">博客</a></li>
-                <li><a href="//edu.csdn.net" title="学院">学院</a></li>
-                <li><a href="//download.csdn.net" title="下载">下载</a></li>
-                <li><a href="https://gitchat.csdn.net/?utm_source=csdn_toolbar" title="图文课">图文课</a></li>
-                <li><a href="//bbs.csdn.net" title="论坛">论坛</a></li>
-                <li class="app-btn"><a href="https://www.csdn.net/app/" title="APP">APP</a>
-                    <div class="appControl">
-                        <span>
-                            <img src="https://csdnimg.cn/public/common/toolbar/images/csdnqr@2x.png">
-                        <em>CSDN</em>
-                        </span>
-                        <span class="eduwx">
-                            <img src="https://csdnimg.cn/public/common/toolbar/images/eduwxfix.png">
-                            <em>CSDN学院</em>
-                        </span>
-                    </div>
-                </li>
-                <li><a href="//ask.csdn.net" title="问答">问答</a></li>
-                <li><a href="https://h5.youzan.com/v2/showcase/homepage?alias=BUj3rrGa2J&amp;ps=760" target="_blank" title="商城">商城</a></li>
-                <li class="vip-caise"><a href="https://mall.csdn.net/vip" title="VIP会员">VIP会员</a></li>
-                <li><a href="//huiyi.csdn.net/" title="活动">活动</a></li>
-                <li><a href="http://job.csdn.net" title="招聘">招聘</a></li>
-                <li><a href="http://www.iteye.com" title="ITeye">ITeye</a></li>
-                <li><a href="https://gitbook.cn/?ref=csdn" title="GitChat">GitChat</a></li>
-            </ul>
-            <div class="pull-right login-wrap unlogin">
-                <ul class="btns">
-                    <li class="toolbar-tracking csdn-tracking-statistics tracking-click" data-mod="popu_369"><a href="#" style="padding:0" target="_blank"></a></li>
-                    <li>
-                        <div class="search_bar csdn-tracking-statistics tracking-click" data-mod="popu_366">
-                            <input type="text" class="input_search" name="" id="toolber-keyword" placeholder="搜博主文章" autocomplete="off">
-                            <a href="//so.csdn.net/so/" target="_blank" class="btn-nobg-noborder btn-search"><svg class="toolbar-icon" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#sousuo"></use></svg></a>
-                        </div>
-                    </li>
-                    <li class="write-bolg-btn csdn-tracking-statistics tracking-click" data-mod="popu_370"><a class="" href="//mp.csdn.net/postedit" target="_blank" id="blogClick"><svg class="toolbar-icon" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#xieboke1"></use></svg><span>写博客</span></a>              </li>
-                    <li class="gitChat baidu-app-btn"><a class="" href="javascript:;"><img src="https://csdnimg.cn/public/common/toolbar/images/baiduapplogo@2x.png" alt="" class="money"><span>小程序</span></a>                <div class="baiduControl" style="display: none;">                <p>百度APP扫码<br>                关注智能小程序</p>                <span>                  <img src="https://csdnimg.cn/public/common/toolbar/images/baiduqr.png">                  <em>阅读体验更佳</em>                </span>              </div></li>
-                    <li class="gitChat upload msgBox" id="msgBox">              <a target="_blank" class="" href="//i.csdn.net/#/msg/index"><img src="https://csdnimg.cn/public/common/toolbar/images/message-icon.png" alt="" class="message"><span>消息</span><div class="toolbar-circle" id="msg-circle"></div></a>                <div class="msgList" id="msgList">                  <a href="//i.csdn.net/#/msg/index">评论<em class="comment"></em></a>                  <a href="//i.csdn.net/#/msg/attention">关注<em class="follow"></em></a>                  <a href="//i.csdn.net/#/msg/like">点赞<em class="thumb_up"></em></a>                  <a href="//i.csdn.net/#/msg/answer">回答<em class="invitation"></em></a>                  <a href="//i.csdn.net/#/msg/notice">系统通知<em class="system"></em></a>                </div>              </li>
-                    <li class="userinfo"><a href="https://passport.csdn.net/account/login" target="_blank">登录</a><span></span><a href="https://passport.csdn.net/account/login" target="_blank">注册</a></li>
-                    <li class="userLogin">
-                        <div class="loginCenter"><a href="//i.csdn.net" target="_blank"><img class="login_img" src="//csdnimg.cn/public/common/toolbar/images/100x100.jpg"></a></div>
-                        <div class="userControl">
-                            <div class="bord">
-                                <div><i class="pull_icon pull_icon1"></i><a href="https://www.csdn.net/nav/watchers" target="_blank">我的关注</a>
-                                </div>
-                                <div><i class="pull_icon pull_icon2"></i><a href="https://i.csdn.net/#/uc/favorite-list" target="_blank">我的收藏</a></div>
-                                <div><i class="pull_icon pull_icon4"></i><a href="https://i.csdn.net/#/uc/profile" target="_blank">个人中心</a></div>
-                                <div><i class="pull_icon pull_icon7"></i><a href="https://i.csdn.net/#/account/index" target="_blank">帐号设置</a></div>
-                            </div>
-                            <div class="bord">
-                                <div><i class="pull_icon pull_icon5"></i><a href="https://blog.csdn.net/" target="_blank">我的博客</a></div>
-                                <div><i class="pull_icon pull_icon6"></i><a href="https://mp.csdn.net/" target="_blank">管理博客</a></div>
-                                <div><i class="pull_icon pull_icon12"></i><a href="https://edu.csdn.net/mycollege" target="_blank">我的学院</a></div>
-                                <div><i class="pull_icon pull_icon13"></i><a href="https://download.csdn.net/my/downloads" target="_blank">我的下载</a></div>
-                            </div>
-                            <div class="bord">
-                                <div><i class="pull_icon pull_icon8"></i><a href="https://my.csdn.net/my/score" target="_blank">我的C币</a></div>
-                                <div><i class="pull_icon pull_icon9"></i><a href="https://order.csdn.net/myorder" target="_blank">订单中心</a></div>
-                            </div>
-                            <div class="bord">
-                                <div><i class="pull_icon pull_icon10"></i><a href="https://blog.csdn.net/home/help.html" target="_blank">帮助</a></div>
-                                <div><i class="pull_icon pull_icon11"></i><a href="javascript:void(0);" class="logout">退出</a></div>
-                            </div>
-                        </div>
-                        <div class="guo_tip_box">关注和收藏在这里</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-
-<header>
-	<div class="container d-flex clearfix" style="background-image: ">
-		<div class="title-box">
-			<h1 class="title-blog">
-				<a href="https://blog.csdn.net/to_be_designer">NewBeeHive Blog</a>
-			</h1>
-			<p class="description ">能麻烦自己的尽量不麻烦别人！</p>
-		</div>
-		<div class="opt-box d-flex justify-content-end">
-					</div>
-	</div>
-	</header>
-<script src="https://dup.baidustatic.com/js/ds.js"></script>
-<div class="container clearfix pt0" id="mainBox">
-    <main>
-        {% block main %}
-        {% endblock main %}
-    </main>
-    <aside>
-		    <div id="asideProfile" class="aside-box">
-    <!-- <h3 class="aside-title">个人资料</h3> -->
-    <div class="profile-intro d-flex">
-        <div class="avatar-box d-flex justify-content-center flex-column">
-            <a href="https://me.csdn.net/To_be_Designer">
-                <img src="https://avatar.csdn.net/5/3/6/3_to_be_designer.jpg" class="avatar_pic">
-            </a>
-
-        </div>
-        <div class="user-info d-flex justify-content-center flex-column">
-            <p class="name csdn-tracking-statistics tracking-click" data-mod="popu_379">
-                <a href="https://me.csdn.net/To_be_Designer" target="_blank" class="" id="uid">小_爽</a>
-            </p>
-                    </div>
-                <div class="opt-box d-flex justify-content-center flex-column">
-            <span  class="csdn-tracking-statistics tracking-click" data-mod="popu_379">
-                <a class="btn btn-sm btn-red-hollow attention" id="btnAttent">关注</a>
-            </span>
-        </div>
-            </div>
-    <div class="data-info d-flex item-tiling">
-                <dl class="text-center" title="134">
-                        <dt><a href="https://blog.csdn.net/to_be_designer?t=1">原创</a></dt>
-            <dd><a href="https://blog.csdn.net/to_be_designer?t=1"><span class="count">134</span></a></dd>
+<body class="zhuti" style="background-color: #f5f6f7">
+<div class="daohang layui-container layui-row layui-col-md12">
+            <ul class="dbdh01 layui-nav" lay-filter="">
+                <li class="layui-nav-item"><img src="{% static 'blog/imgs/logo.png' %}"></li>
+                <li class="layui-nav-item"><a href="">首页</a></li>
+                <li class="layui-nav-item"><a href="">博客</a></li>
+                <li class="layui-nav-item"><a href="">学院</a></li>
+                <li class="layui-nav-item"><a href="">下载</a></li>
+                <li class="layui-nav-item"><a href="">论坛</a></li>
+                <li class="layui-nav-item"><a href="">问答</a></li>
+                <li class="layui-nav-item"><a href="">GitChat</a></li>
+                <li class="layui-nav-item"><a href="">招聘</a></li>
+                <li class="layui-nav-item"><a href="">活动</a></li>
+                <li class="layui-nav-item">
+                  <a href="javascript:;"><i class="layui-icon layui-icon-more" style="font-size: 18px;color: #3f3f3f"></i></a>
+                    <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                        <dd><a href="">TinyMind</a></dd>
+                        <dd><a href="">ITeye</a></dd>
+                        <dd><a href="">CSTO</a></dd>
                     </dl>
-        <dl class="text-center" id="fanBox" title="415">
-            <dt>粉丝</dt>
-            <dd><span class="count" id="fan">415</span></dd>
-        </dl>
-        <dl class="text-center" title="118">
-            <dt>喜欢</dt>
-            <dd><span class="count">118</span></dd>
-        </dl>
-        <dl class="text-center" title="193">
-            <dt>评论</dt>
-            <dd><span class="count">193</span></dd>
-        </dl>
+                </li>
+            </ul>
+            <ul class="dbdh02 layui-nav layui-layout-right" lay-filter="">
+                <li class="layui-nav-item" id="sousuo">
+                    <input type="text" name="sousuo" class="layui-input" placeholder="请输入搜索内容" autocomplete="off">
+                   <a href="">
+                       <i class="layui-icon layui-icon-search" style="color: #3f3f3f"></i>
+                   </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href=""><i class="layui-icon layui-icon-edit" style="font-size: 18px;"></i>写博客</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href=""><i class="layui-icon layui-icon-release" style="font-size: 18px;"></i> 发Chat</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href=""><img src="{% static 'blog/imgs/1_mdxiaohu.jpg' %}" class="layui-nav-img">我</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">我的博客</a></dd>
+                        <dd><a href="javascript:;">消息</a></dd>
+                        <dd><a href="javascript:;">账号设置</a></dd>
+                        <dd><a href="javascript:;">反馈</a></dd>
+                        <dd><a href="javascript:;">帮助</a></dd>
+                        <dd><a href="javascript:;">退出</a></dd>
+                    </dl>
+                </li>
+            </ul>
+</div>
+<div class="zuobian layui-container layui-row">
+    <div class="ding">
+        <div class="grming">
+        <h2>mdxiaohu的博客</h2>
+        </div>
+        <div class="dingyue">
+            <a href="" class="layui-btn layui-btn-radius layui-btn-normal">
+                <i class="layui-icon layui-icon-rate" style="font-size: 20px;"></i>RSS订阅</a>
+            <a href="" class="layui-btn layui-btn-radius layui-btn-normal">
+                <i class="layui-icon layui-icon-set-fill" style="font-size: 20px;"></i>管理博客</a>
+        </div>
+        <img class="bt00" src="{% static 'blog/imgs/bjt01.png' %}" alt="">
     </div>
-    <div class="grade-box clearfix">
-        <dl>
-            <dt>等级：</dt>
-            <dd>
-                <a href="https://blog.csdn.net/home/help.html#level" title="6级,点击查看等级说明" target="_blank">
-                    <svg class="icon icon-level" aria-hidden="true">
-                        <use xlink:href="#csdnc-bloglevel-6"></use>
-                    </svg>
-                </a>
-            </dd>
-        </dl>
-        <dl>
-            <dt>访问：</dt>
-            <dd title="349866">
-                34万+            </dd>
-        </dl>
-        <dl>
-            <dt>积分：</dt>
-            <dd title="5715">
-                5715            </dd>
-        </dl>
-        <dl title="7425">
-            <dt>排名：</dt>
-            <dd>7425</dd>
-        </dl>
-    </div>
-        <div class="badge-box d-flex">
-        <span>勋章：</span>
-                <div class="icon-badge" title="专栏达人">
-            <div class="mouse-box">
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#csdnc-m-columns"></use>
-                </svg>
-                <div class="icon-arrow"></div>
+        <div class="right0 layui-col-md3">
+            <div class="grxx0">
+            <div class="grxx">
+                <h3>
+                    个人资料
+                </h3>
             </div>
-            <div class="grade-detail-box">
-                <div class="pos-box">
-                    <div class="left-box d-flex justify-content-center align-items-center flex-column">
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#csdnc-m-columns"></use>
-                        </svg>
-                        <p>专栏达人</p>
+                <div class="touzi01">
+                    <a class="grxx01" href=""><img src="{% static 'blog/imgs/1_mdxiaohu.jpg' %}" alt=""></a>
+                    <a href="" class="grxx02">mdxiaohu</a>
+                </div>
+                <div class="yc01">
+                    <dl class="jishu01">
+                        <dt class="jishu02"><a href="">原创</a></dt>
+                        <dd>
+                            <a href="" class="jishu03">
+                                <span class="jishu05">5</span>
+                            </a>
+                        </dd>
+                    </dl>
+                    <dl class="jishu01">
+                        <dt class="jishu02"><a href="">粉丝</a></dt>
+                        <dd>
+                            <a href="" class="jishu03">
+                                <span class="jishu05">0</span>
+                            </a>
+                        </dd>
+                    </dl>
+                    <dl class="jishu01">
+                        <dt class="jishu02"><a href="">喜欢</a></dt>
+                        <dd>
+                            <a href="" class="jishu03">
+                                <span class="jishu05">0</span>
+                            </a>
+                        </dd>
+                    </dl>
+                    <dl class="jishu01">
+                        <dt class="jishu02"><a href="">评论</a></dt>
+                        <dd>
+                            <a href="" class="jishu03">
+                                <span class="jishu05">0</span>
+                            </a>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="yc02">
+                    <div>
+                    <dl class="yc02-01">
+                        <dt class="yc02-02"><a href="">等级：</a></dt>
+                        <dd>
+                            <a href="" class="yc02-03">
+                                <span class="layui-badge layui-bg-orange">博客<span class="lu0 layui-badge layui-bg-green">7</span></span>
+                            </a>
+                        </dd>
+                    </dl>
+                    <dl class="yc02-01">
+                        <dt class="yc02-02"><a href="">访问：</a></dt>
+                        <dd>
+                            <a href="" class="yc02-03">
+                                <span class="yc02-04">1025</span>
+                            </a>
+                        </dd>
+                    </dl>
                     </div>
-                    <div class="right-box d-flex justify-content-center align-items-center">
-                        授予成功创建个人博客专栏的用户。专栏中添加五篇以上博文即可点亮！撰写博客专栏浓缩技术精华，专栏达人就是你！
+                    <div>
+                    <dl class="yc02-01">
+                        <dt class="yc02-02"><a href="">积分：</a></dt>
+                        <dd>
+                            <a href="" class="yc02-03">
+                                <div class="yc02-04">5</div>
+                            </a>
+                        </dd>
+                    </dl>
+                    <dl class="yc02-01">
+                        <dt class="yc02-02"><a href="">排名：</a></dt>
+                        <dd>
+                            <a href="" class="yc02-03">
+                                <div class="yc02-04">1千+</div>
+                            </a>
+                        </dd>
+                    </dl>
                     </div>
                 </div>
+                <div class="xun00">
+                    勋章：  <span class="layui-badge">持之以恒</span>
+                </div>
+            </div>
+            <div class="grxx0">
+                <div class="grxx">
+                    <h3>
+                        归档
+                    </h3>
+                </div>
+                <div class="guid">
+                    <ul class="guid01">
+                        <li class="guid02">
+                            <a class="guidy0" href="">
+                                2018年6月
+                                <span id="guid03">5篇</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="right-tuisong">
+                <div class="right-caini">
+                    <ul class="caini01">
+                        <div class="grxx">
+                            <h3>
+                                热门文章
+                            </h3>
+                        </div>
+                        <li class="caini02">
+                            <a href="">ASP.NET三层架构及短信发送案例（一）</a>
+                        </li>
+                        <p class="yd01">阅读量：<span>500</span></p>
+                        <li class="caini02">
+                            <a href="">ASP.NET三层架构及短信发送案例（二）</a>
+                        </li>
+                        <p class="yd01">阅读量：<span>170</span></p>
+                        <li class="caini02">
+                           <a href="">ASP.NET三层架构及短信发送案例（三）</a>
+                        </li>
+                        <p class="yd01">阅读量：<span>162</span></p>
+                        <li class="caini02">
+                           <a href="">ASP.NET三层架构及短信发送案例（四）</a>
+                        </li>
+                        <p class="yd01">阅读量：<span>158</span></p>
+                        <li class="caini02">
+                           <a href="">ASP.NET三层架构及短信发送案例（五）</a>
+                        </li>
+                        <p class="yd01">阅读量：<span>79</span></p>
+                        <li class="caini02">
+                            <a href="">19个超赞的数据科学和机器学习工具，编程小白必看！（附资料）</a>
+                        </li>
+                        <p class="yd01">阅读量：<span>500</span></p>
+                    </ul>
+                </div>
+            </div>
+            <div class="lianxi">
+                <div class="grxx">
+                    <h3>
+                        联系我们
+                    </h3>
+                </div>
+                <div class="lianxi03">
+                    <div class="lianxi02"><img src="{% static 'blog/imgs/ewm1.jpg' %}" alt="二维码"></div>
+                    <div class="lianxi01">
+                        <h4>扫描二维码联系客服</h4>
+                        <p><i class="icon iconfont">&#xe50d;</i> mdxiaohu</p>
+                        <p><i class="icon iconfont">&#xe609;</i> 400-888-6660</p>
+                        <p><i class="icon iconfont">&#xe64c;</i> 317108332</p>
+                    </div>
+                </div>
+                <div id="peixun00" class="peixun01 layui-breadcrumb" lay-separator="·">
+                    <a href="" class="zihao01">关于</a>
+                    <a href="" class="zihao01">招聘</a>
+                    <a href="" class="zihao01">广告服务</a>
+                    <a href="" class="zihao01">培训</a>
+                </div>
+                <div class="suoyou01">©2018 DBB博客版权所有 mdxiaohu</div>
             </div>
         </div>
-                                                        <script>
-            (function ($) {
-                setTimeout(function(){
-                    $('div.icon-badge.show-moment').removeClass('show-moment');
-                }, 5000);
-            })(window.jQuery)
-        </script>
-    </div>
-    </div>
-		    <div class="csdn-tracking-statistics mb8 box-shadow" data-pid="blog" data-mod="popu_4" style="height:250px;">
-    <div class="aside-content text-center" id="cpro_u2734133">
-      <script type="text/javascript" src="//rabc1.iteye.com/production/openjs/d9o6b.js?bwo=coltly"></script>    </div>
-</div>
-		    		    <div id="asideColumn" class="aside-box">
-    <h3 class="aside-title">博主专栏</h3>
-    <div class="aside-content">
-        <ul class="column-box csdn-tracking-statistics tracking-click" data-mod="popu_520" >
-                            <li class="clearfix">
-                    <div class="img-box float-left">
-                        <a class="d-flex align-items-center" href="https://blog.csdn.net/To_be_Designer/column/info/xiaoshuang-ui">
-                            <img src="https://img-blog.csdn.net/20151123180447036?imageView2/5/w/120/h/120" alt="">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <p class="title"><a href="https://blog.csdn.net/To_be_Designer/column/info/xiaoshuang-ui">Android UI设计系列</a></p>
-                        <div class="data">文章数：<span class="count">31 篇</span> 访问量：<span>11万+</span></div>
-                    </div>
-                </li>
-                            <li class="clearfix">
-                    <div class="img-box float-left">
-                        <a class="d-flex align-items-center" href="https://blog.csdn.net/To_be_Designer/column/info/android-data-storage">
-                            <img src="https://img-blog.csdn.net/20151123180447974?imageView2/5/w/120/h/120" alt="">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <p class="title"><a href="https://blog.csdn.net/To_be_Designer/column/info/android-data-storage">Android中的数据存储</a></p>
-                        <div class="data">文章数：<span class="count">4 篇</span> 访问量：<span>1万+</span></div>
-                    </div>
-                </li>
-                            <li class="clearfix">
-                    <div class="img-box float-left">
-                        <a class="d-flex align-items-center" href="https://blog.csdn.net/To_be_Designer/column/info/android-connection">
-                            <img src="https://img-blog.csdn.net/20151123180504114?imageView2/5/w/120/h/120" alt="">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <p class="title"><a href="https://blog.csdn.net/To_be_Designer/column/info/android-connection">Android 网络应用</a></p>
-                        <div class="data">文章数：<span class="count">7 篇</span> 访问量：<span>1万+</span></div>
-                    </div>
-                </li>
-                            <li class="clearfix">
-                    <div class="img-box float-left">
-                        <a class="d-flex align-items-center" href="https://blog.csdn.net/To_be_Designer/column/info/android-view">
-                            <img src="https://img-blog.csdn.net/20151123180533411?imageView2/5/w/120/h/120" alt="">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <p class="title"><a href="https://blog.csdn.net/To_be_Designer/column/info/android-view">Android 自定义View和ViewGroup系列</a></p>
-                        <div class="data">文章数：<span class="count">10 篇</span> 访问量：<span>4万+</span></div>
-                    </div>
-                </li>
-                            <li class="clearfix">
-                    <div class="img-box float-left">
-                        <a class="d-flex align-items-center" href="https://blog.csdn.net/To_be_Designer/column/info/15742">
-                            <img src="https://img-blog.csdn.net/20170524164225628?imageView2/5/w/120/h/120" alt="">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <p class="title"><a href="https://blog.csdn.net/To_be_Designer/column/info/15742">Java基础系列</a></p>
-                        <div class="data">文章数：<span class="count">31 篇</span> 访问量：<span>3万+</span></div>
-                    </div>
-                </li>
-                    </ul>
-    </div>
-    </div>
-		    <div id="asideCategory" class="aside-box flexible-box">
-    <h3 class="aside-title">个人分类</h3>
-    <div class="aside-content">
-        <ul>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5687325">
-                    <span class="title oneline">JAVA</span>
-                    <span class="count float-right">32篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5724975">
-                    <span class="title oneline">数据库</span>
-                    <span class="count float-right">5篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5699683">
-                    <span class="title oneline">Android</span>
-                    <span class="count float-right">98篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5753209">
-                    <span class="title oneline">Android之Activity</span>
-                    <span class="count float-right">5篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5755941">
-                    <span class="title oneline">Android之UI设计</span>
-                    <span class="count float-right">22篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5797749">
-                    <span class="title oneline">Android之数据存储</span>
-                    <span class="count float-right">3篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5784745">
-                    <span class="title oneline">Android UI设计小知识</span>
-                    <span class="count float-right">3篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5810185">
-                    <span class="title oneline">Android 网络连接</span>
-                    <span class="count float-right">7篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5818339">
-                    <span class="title oneline">Android 多媒体应用</span>
-                    <span class="count float-right">6篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5852589">
-                    <span class="title oneline">Android 自定义View和ViewGroup</span>
-                    <span class="count float-right">11篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/6887575">
-                    <span class="title oneline">Android Gradle配置</span>
-                    <span class="count float-right">1篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/6887578">
-                    <span class="title oneline">Android 开发框架</span>
-                    <span class="count float-right">2篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5852587">
-                    <span class="title oneline">Android 动画</span>
-                    <span class="count float-right">3篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5712217">
-                    <span class="title oneline">设计模式</span>
-                    <span class="count float-right">1篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5724989">
-                    <span class="title oneline">小小项目</span>
-                    <span class="count float-right">15篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/5750241">
-                    <span class="title oneline">Markdown</span>
-                    <span class="count float-right">1篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/6883335">
-                    <span class="title oneline">总结</span>
-                    <span class="count float-right">1篇</span>
-                </a>
-            </li>
-                        <li>
-                <a class="clearfix" href="https://blog.csdn.net/to_be_designer/article/category/7580407">
-                    <span class="title oneline">Android开发</span>
-                    <span class="count float-right">2篇</span>
-                </a>
-            </li>
-                    </ul>
-    </div>
-        <p class="text-center">
-        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
-    </p>
-    </div>
-		    <div id="asideArchive" class="aside-box flexible-box">
-    <h3 class="aside-title">归档</h3>
-    <div class="aside-content">
-        <ul class="archive-list">
-                        <!--归档统计-->
-            <li>
-                <a href="https://blog.csdn.net/to_be_designer/article/month/2018/04">
-                    2018年4月                    <span class="count float-right">2篇</span>
-                </a>
-            </li>
-                        <!--归档统计-->
-            <li>
-                <a href="https://blog.csdn.net/to_be_designer/article/month/2017/05">
-                    2017年5月                    <span class="count float-right">1篇</span>
-                </a>
-            </li>
-                        <!--归档统计-->
-            <li>
-                <a href="https://blog.csdn.net/to_be_designer/article/month/2017/04">
-                    2017年4月                    <span class="count float-right">4篇</span>
-                </a>
-            </li>
-                        <!--归档统计-->
-            <li>
-                <a href="https://blog.csdn.net/to_be_designer/article/month/2015/10">
-                    2015年10月                    <span class="count float-right">7篇</span>
-                </a>
-            </li>
-                        <!--归档统计-->
-            <li>
-                <a href="https://blog.csdn.net/to_be_designer/article/month/2015/09">
-                    2015年9月                    <span class="count float-right">58篇</span>
-                </a>
-            </li>
-                        <!--归档统计-->
-            <li>
-                <a href="https://blog.csdn.net/to_be_designer/article/month/2015/08">
-                    2015年8月                    <span class="count float-right">63篇</span>
-                </a>
-            </li>
-                        <!--归档统计-->
-            <li>
-                <a href="https://blog.csdn.net/to_be_designer/article/month/2015/07">
-                    2015年7月                    <span class="count float-right">7篇</span>
-                </a>
-            </li>
-                    </ul>
-    </div>
-        <p class="text-center">
-        <a class="btn btn-link-blue flexible-btn" data-fbox="aside-archive">展开</a>
-    </p>
-    </div>
-		    <div id="asideHotArticle" class="aside-box">
-	<h3 class="aside-title">热门文章</h3>
-	<div class="aside-content">
-		<ul class="hotArticle-list csdn-tracking-statistics tracking-click" data-mod="popu_521">
-							<li>
-					<a href="https://blog.csdn.net/to_be_designer/article/details/48164783">聊天界面的制作（三）——表情列表发送功能</a>
-					<p class="read">阅读数 <span>43393</span></p>
-				</li>
-							<li>
-					<a href="https://blog.csdn.net/to_be_designer/article/details/48531895">Android 自定义View——自定义点击事件</a>
-					<p class="read">阅读数 <span>14707</span></p>
-				</li>
-							<li>
-					<a href="https://blog.csdn.net/to_be_designer/article/details/48162791">Android UI设计小知识——渐变色背景的制作</a>
-					<p class="read">阅读数 <span>9460</span></p>
-				</li>
-							<li>
-					<a href="https://blog.csdn.net/to_be_designer/article/details/47406443">数据库简单操作—注册和登录实例</a>
-					<p class="read">阅读数 <span>8954</span></p>
-				</li>
-							<li>
-					<a href="https://blog.csdn.net/to_be_designer/article/details/47983017">Android UI设计——ListView控件和自定义Adapter（四）</a>
-					<p class="read">阅读数 <span>8811</span></p>
-				</li>
-					</ul>
-	</div>
-</div>
-		    <div id="asideNewComments" class="aside-box">
-    <h3 class="aside-title">最新评论</h3>
-    <div class="aside-content">
-        <ul class="newcomment-list">
-                        <li>
-                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/to_be_designer/article/details/47425881#comments">Java搭建servlet时doG...</a>
-                <p class="comment ellipsis">
-                    <a href="https://my.csdn.net/destory27" class="user-name" target="_blank">destory27：</a>[reply]qq_35809640[/reply]
-确实不行                </p>
-            </li>
-                        <li>
-                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/to_be_designer/article/details/70228455#comments">每一次结束都是一次新的开始</a>
-                <p class="comment ellipsis">
-                    <a href="https://my.csdn.net/liangjianing1121" class="user-name" target="_blank">liangjianing1121：</a>第一次看到你的博客那篇聊天页面制作 后来慢慢的你的博客几乎每一篇都看过了 这篇已经不是第一次看了 每次闲着不知道干什么的时候  就会点开你的博客看 弥补一下自己欠缺的知识 喜欢你写的博客 简洁明了 看到你这篇博客说的第一份工作的时候 感觉看到了现在的自己 其实有时候迷茫 感觉不知道自己能不能在这行坚持下去 但是每次看到你这篇博客  就没有想要放弃Android的感觉了 想要坚持下去 女生做开发也能做的很好 向你学习                </p>
-            </li>
-                        <li>
-                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/to_be_designer/article/details/48274691#comments">Android中数据存储——SQL...</a>
-                <p class="comment ellipsis">
-                    <a href="https://my.csdn.net/u013890228" class="user-name" target="_blank">u013890228：</a>文章写的不错                </p>
-            </li>
-                        <li>
-                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/to_be_designer/article/details/48530921#comments">Android  PorterDu...</a>
-                <p class="comment ellipsis">
-                    <a href="https://my.csdn.net/u013122144" class="user-name" target="_blank">u013122144：</a>忍不住想吐槽,&quot;  使用PorterDuff.Mode不能直接在View的画布上使用，也就是不能在自定义View的onDraw()方法中使用。必须在Bitmap的Canvas上使用，PorterDuff.Mode效果是应用在Paint上的.  &quot;  这几句,楼主你试了吗,有看官方文档吗,不要误导                </p>
-            </li>
-                        <li>
-                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/to_be_designer/article/details/49104969#comments">Android 项目实践（三）——...</a>
-                <p class="comment ellipsis">
-                    <a href="https://my.csdn.net/ITbigger" class="user-name" target="_blank">ITbigger：</a>写的太jb渣渣了，fuck。                </p>
-            </li>
-                    </ul>
-    </div>
-</div>
-		<div id="asideFooter">
-
-		<div class="aside-box">
-			<script type="text/javascript" src="//rabc1.iteye.com/source/h751.js?avneunkw=b"></script>		</div>
-				<div class="aside-box">
-			<div class="persion_article">
-			</div>
-		</div>
-	</div>
-</aside>
-<script src="https://csdnimg.cn/pubfooter/js/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script>
-<script>
-	$("a.flexible-btn").click(function(){
-		$(this).parents('div.aside-box').removeClass('flexible-box');
-		$(this).remove();
-	})
-</script>
-</div>
-<div class="mask"></div>
-<div class="promptBox clearfix">
-    <div class="title clearfix bottom-dis-16">
-        <span class="float-left">提示</span>
-        <a class="float-right Boxclose">
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#csdnc-times"></use>
-            </svg>
-        </a>
-    </div>
-    <div class="text">确定要删除当前文章？</div>
-    <div class="pro-btn float-right">
-        <a class="clickNo">取消</a>
-        <a class="clickYes">删除</a>
-    </div>
-</div>
-<script>
-    var currentPage = 1;
-    var baseUrl = 'https://blog.csdn.net/To_be_Designer/article/list' ;
-    var pageSize = 20 ;
-    var listTotal = 142 ;
-    var pageQueryStr = '?';
-    function getAllUrl(page) {
-        return baseUrl + "/" + page + pageQueryStr;
-    }
-</script>
-<script src="//g.csdnimg.cn/??login-box/1.0.5/login-box.js,login-box/1.0.5/login-auto.js?t=20190307095522"></script>
-
-<script src="https://csdnimg.cn/release/phoenix/vendor/pagination/paging.js"></script>
-<script src='https://csdnimg.cn/public/common/gotop/js/goTop-v1.0.min.js?v201811201455'></script>
-<script src="https://csdnimg.cn/release/phoenix/template/js/common-54efcefd0c.min.js"></script>
-<script src="https://csdnimg.cn/release/phoenix/template/js/list-7c51275791.min.js"></script>
+    {% block main %}
+    {% endblock main %}
 
 
-<script>
-    GoTop({
-        right: 8
-    })
-</script>
-<div class="box-box-default">
-    <a class="btn-remove">
-        关闭
-    </a>
-    <script type="text/javascript" src="//cee1.iteye.com/mhzzjepzz.js"></script>
-</div>
-<div class="box-box-large">
-    <a class="btn-remove">
-        关闭
-    </a>
-    <script type="text/javascript" src="//cee1.iteye.com/idvveasfs.js"></script>
-</div>
+
+    </div>
+    </div>
+
+<script src="{% static 'layui/layui.js' %}"></script>
+    <script>
+        //注意：导航 依赖 element 模块，否则无法进行功能性操作
+        layui.use('element', function(){
+            var element = layui.element;
+            //…
+        });
+        layui.use('carousel', function(){
+            var carousel = layui.carousel;
+            //建造实例
+            carousel.render({
+                elem: '#test1'
+                ,width: '100%' //设置容器宽度
+                ,height:'200px'
+                ,arrow: 'hover' //始终显示箭头
+                //,anim: 'updown' //切换动画方式
+                ,interval:'3000'
+            });
+        });
+        //Demo
+        layui.use('form', function(){
+            var form = layui.form;
+
+            //监听提交
+            form.on('submit(formDemo)', function(data){
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+        });
+
+        layui.use('laypage', function(){
+            var laypage = layui.laypage;
+
+        //自定义样式
+        laypage.render({
+            elem: 'demo2'    //注意，这里的 test1 是 ID，不用加 # 号
+            ,count: 100      //数据总数，从服务端得到
+            ,theme: '#C92027'
+        });
+            });
+    </script>
 </body>
 </html>
