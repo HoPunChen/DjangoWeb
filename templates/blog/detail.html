@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<div class="zhongjian layui-col-md8">
+<div class="zhongjian layui-col-md6">
 
         <div class="zu1">
         <div class="tb0">
@@ -18,7 +18,9 @@
         </div>
         </div>
         <article class="wb00">
+            <div class="markdown-body">
             {{ post.body|safe }}
+            </div>
         </article>
 
         <div class="wbiao">
