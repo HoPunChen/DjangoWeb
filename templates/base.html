@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load blog_tags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -167,51 +168,63 @@
                     </h3>
                 </div>
                 <div class="guid">
+                    {% archives as date_list %}
                     <ul class="guid01">
+                        {% for date in date_list %}
                         <li class="guid02">
                             <a class="guidy0" href="">
-                                2018年6月
+                                {{ date.year }} 年 {{ date.month }} 月
                                 <span id="guid03">5篇</span>
                             </a>
                         </li>
+                        {% empty %}
+                        暂无归档！
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
             <div class="right-tuisong">
                 <div class="right-caini">
+                    {% get_recent_posts as recent_post_list %}
                     <ul class="caini01">
                         <div class="grxx">
                             <h3>
                                 热门文章
                             </h3>
                         </div>
+                        {% for post in recent_post_list %}
                         <li class="caini02">
-                            <a href="">ASP.NET三层架构及短信发送案例（一）</a>
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
                         </li>
                         <p class="yd01">阅读量：<span>500</span></p>
-                        <li class="caini02">
-                            <a href="">ASP.NET三层架构及短信发送案例（二）</a>
-                        </li>
-                        <p class="yd01">阅读量：<span>170</span></p>
-                        <li class="caini02">
-                           <a href="">ASP.NET三层架构及短信发送案例（三）</a>
-                        </li>
-                        <p class="yd01">阅读量：<span>162</span></p>
-                        <li class="caini02">
-                           <a href="">ASP.NET三层架构及短信发送案例（四）</a>
-                        </li>
-                        <p class="yd01">阅读量：<span>158</span></p>
-                        <li class="caini02">
-                           <a href="">ASP.NET三层架构及短信发送案例（五）</a>
-                        </li>
-                        <p class="yd01">阅读量：<span>79</span></p>
-                        <li class="caini02">
-                            <a href="">19个超赞的数据科学和机器学习工具，编程小白必看！（附资料）</a>
-                        </li>
-                        <p class="yd01">阅读量：<span>500</span></p>
+                        {% empty %}
+                        暂无文章！
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
+
+            <div class="right-tuisong">
+                <div class="right-caini">
+
+                {% get_categories as category_list %}
+                <ul class="caini01">
+                    <div class="grxx">
+                        <h3 >分类</h3>
+                    </div>
+
+
+                    {% for category in category_list %}
+                    <li class="caini02">
+                        <a href="#">{{ category.name }} <span class="post-count">(13)</span></a>
+                    </li>
+                    {% empty %}
+                    暂无分类！
+                    {% endfor %}
+                </ul>
+            </div>
+            </div>
+
             <div class="lianxi">
                 <div class="grxx">
                     <h3>

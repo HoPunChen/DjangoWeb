@@ -90,7 +90,7 @@
     color: #858585;
     text-align: right;
 }
-.zuobian .right0 .right-tuisong .caini01 .caini02 > a{
+.zuobian .right0 .right-tuisong .caini01 .caini02 .category > a{
     display: block;
     width: 280px;
     font-size: 14px;
@@ -126,11 +126,16 @@
 .zhongjian{
     margin-top: 30px;
 }
-.right-tuisong .right-caini .caini01 .caini02 > a:hover{
+.right-tuisong .right-caini .caini01 .caini02 .category> a:hover{
     color: #ca0c16;
 }
 .guid .guid01 .guid02 > a:hover{
     color: #ca0c16;
+}
+
+.category {
+    padding-bottom: 20px;
+    background-color: #fff;
 }
 /*左边结束*/
 /*右边开始*/
